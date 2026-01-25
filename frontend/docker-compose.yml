@@ -1,11 +1,9 @@
 services:
-  web:
+  resume-site:
     build:
       context: .
-      dockerfile: Dockerfile
-    container_name: nextjs-bun-app
+      dockerfile: dockerfile
+    container_name: nextjs-bun-frontend
     ports:
-      - "3000:3000"
-    environment:
-      - NODE_ENV=alpha
+      - "12000:3000"
     restart: always
