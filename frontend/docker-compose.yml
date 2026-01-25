@@ -6,7 +6,7 @@ services:
       dockerfile: dockerfile
     container_name: nextjs-portfolio
     ports:
-      - "3000:3000"
+      - "12000:3000"
     environment:
       - NODE_ENV=production
     restart: always
