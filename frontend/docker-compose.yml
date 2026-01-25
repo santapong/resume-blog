@@ -1,9 +1,12 @@
 services:
   resume-site:
     build:
-      context: .
+      # This tells Dokploy to look in the current directory for the files
+      context: . 
       dockerfile: dockerfile
-    container_name: nextjs-bun-frontend
+    container_name: nextjs-portfolio
     ports:
-      - "12000:3000"
+      - "3000:3000"
+    environment:
+      - NODE_ENV=production
     restart: always
