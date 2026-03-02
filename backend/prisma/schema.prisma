@@ -1,0 +1,53 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+model Experience {
+  id           Int      @id @default(autoincrement())
+  title        String
+  company      String
+  period       String
+  description  String
+  technologies String   // JSON array stored as string
+  order        Int      @default(0)
+  createdAt    DateTime @default(now())
+}
+
+model Skill {
+  id       Int    @id @default(autoincrement())
+  category String
+  items    String // JSON array stored as string
+  order    Int    @default(0)
+}
+
+model Project {
+  id           Int      @id @default(autoincrement())
+  title        String
+  description  String
+  imageUrl     String?
+  liveUrl      String?
+  repoUrl      String?
+  technologies String   // JSON array stored as string
+  featured     Boolean  @default(false)
+  order        Int      @default(0)
+  createdAt    DateTime @default(now())
+}
+
+model Resume {
+  id         Int      @id @default(autoincrement())
+  filename   String
+  isActive   Boolean  @default(true)
+  uploadedAt DateTime @default(now())
+}
+
+model SiteConfig {
+  id           Int    @id @default(1)
+  heroTitle    String @default("Software & Automation Engineer")
+  heroSubtitle String @default("")
+  aboutText    String @default("")
+}

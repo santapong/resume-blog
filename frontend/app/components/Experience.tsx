@@ -1,35 +1,77 @@
-import { resumeData } from '@/app/data/resume';
-import { Briefcase } from 'lucide-react';
+"use client";
+
+import React, { useEffect, useState } from 'react';
+import { getExperiences, type Experience as ExperienceType } from '@/app/lib/api';
 
 export default function Experience() {
+  const [experiences, setExperiences] = useState<ExperienceType[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    getExperiences()
+      .then(setExperiences)
+      .catch(() => { })
+      .finally(() => setLoading(false));
+  }, []);
+
+  if (loading) {
+    return (
+      <section className="py-20 bg-parchment-texture px-6">
+        <div className="max-w-4xl mx-auto text-center text-iron">
+          Unrolling the chronicles...
+        </div>
+      </section>
+    );
+  }
+
   return (
-    <section className="py-20 bg-white px-6">
+    <section className="py-20 bg-parchment-texture px-6">
       <div className="max-w-4xl mx-auto">
-        <h2 className="text-3xl font-bold mb-12 flex items-center gap-3 text-slate-900">
-          <Briefcase className="text-blue-600" /> Professional Experience
-        </h2>
-        
-        <div className="space-y-12">
-          {resumeData.experience.map((job, index) => (
-            <div key={index} className="relative pl-8 border-l-2 border-slate-100">
-              <div className="absolute w-4 h-4 bg-blue-600 rounded-full -left-[9px] top-1 outline outline-4 outline-white" />
-              <div className="flex flex-wrap justify-between items-baseline mb-2">
-                <h3 className="text-xl font-bold text-slate-800">{job.title}</h3>
-                <span className="text-sm font-mono text-slate-500 bg-slate-50 px-3 py-1 rounded-full border border-slate-100">
+        <h2 className="section-heading mb-12">Chronicles of Service</h2>
+
+        <div className="space-y-8">
+          {experiences.map((job, index) => (
+            <div
+              key={job.id}
+              className="scroll-card p-6 md:p-8 animate-fade-in-up"
+              style={{ animationDelay: `${index * 0.15}s` }}
+            >
+              {/* Wax Seal decoration */}
+              <div className="flex items-start justify-between gap-4 mb-4">
+                <div className="flex-1">
+                  <h3 className="font-[family-name:var(--font-heading)] text-xl font-bold text-dark-wood">
+                    {job.title}
+                  </h3>
+                  <p className="text-crimson font-semibold mt-1">{job.company}</p>
+                </div>
+                <span className="wax-tag whitespace-nowrap">
                   {job.period}
                 </span>
               </div>
-              <p className="text-blue-600 font-medium mb-3">{job.company}</p>
-              <p className="text-slate-600 mb-4 leading-relaxed">{job.description}</p>
+
+              {/* Divider */}
+              <div className="h-px bg-gradient-to-r from-gold/50 to-transparent mb-4" />
+
+              {/* Description */}
+              <p className="text-iron leading-relaxed mb-4">{job.description}</p>
+
+              {/* Technologies */}
               <div className="flex flex-wrap gap-2">
-                {job.technologies.map(tech => (
-                  <span key={tech} className="text-xs font-semibold bg-slate-100 text-slate-600 px-2 py-1 rounded">
+                {job.technologies.map((tech: string) => (
+                  <span key={tech} className="iron-tag">
                     {tech}
                   </span>
                 ))}
               </div>
             </div>
           ))}
+
+          {experiences.length === 0 && (
+            <div className="text-center text-iron/60 py-12">
+              <p className="font-[family-name:var(--font-heading)] text-lg">No chronicles yet</p>
+              <p className="text-sm mt-2">The story awaits its first chapter...</p>
+            </div>
+          )}
         </div>
       </div>
     </section>

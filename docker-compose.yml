@@ -1,0 +1,32 @@
+services:
+  backend:
+    build:
+      context: ./backend
+      dockerfile: dockerfile
+    container_name: medieval-backend
+    ports:
+      - "12001:12001"
+    environment:
+      - NODE_ENV=production
+    volumes:
+      - backend-uploads:/app/uploads
+      - backend-db:/app/prisma
+    restart: always
+
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: dockerfile
+    container_name: medieval-frontend
+    ports:
+      - "12000:3000"
+    environment:
+      - NODE_ENV=production
+      - NEXT_PUBLIC_API_URL=http://localhost:12001/api
+    depends_on:
+      - backend
+    restart: always
+
+volumes:
+  backend-uploads:
+  backend-db:

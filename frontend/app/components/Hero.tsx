@@ -1,10 +1,15 @@
 "use client";
 
-import React from 'react';
-import { Terminal, Cpu, ArrowRight, Mail } from 'lucide-react';
+import React, { useEffect, useState } from 'react';
+import { getConfig, type SiteConfig } from '@/app/lib/api';
 
 export default function Hero() {
-  // Smooth scroll function for internal navigation
+  const [config, setConfig] = useState<SiteConfig | null>(null);
+
+  useEffect(() => {
+    getConfig().then(setConfig).catch(() => { });
+  }, []);
+
   const scrollTo = (id: string) => {
     const element = document.getElementById(id);
     if (element) {
@@ -13,71 +18,79 @@ export default function Hero() {
   };
 
   return (
-    <section className="min-h-[90vh] flex items-center justify-center bg-white px-6 overflow-hidden relative">
-      {/* Subtle Background Pattern - Grid/Automation Aesthetic */}
-      <div 
-        className="absolute inset-0 z-0 opacity-[0.03] pointer-events-none" 
-        style={{ 
-          backgroundImage: 'radial-gradient(#2563eb 1px, transparent 1px)', 
-          backgroundSize: '40px 40px' 
-        }} 
-      />
+    <section className="relative min-h-[90vh] flex items-center justify-center bg-parchment-texture overflow-hidden">
+      {/* Decorative torch glows */}
+      <div className="absolute top-20 left-10 w-40 h-40 bg-gold/20 rounded-full torch-glow pointer-events-none" />
+      <div className="absolute bottom-20 right-10 w-32 h-32 bg-crimson/15 rounded-full torch-glow pointer-events-none" style={{ animationDelay: '1.5s' }} />
 
-      <div className="max-w-4xl w-full z-10">
+      {/* Corner ornaments */}
+      <div className="absolute top-6 left-6 text-gold/30 text-4xl pointer-events-none">╔</div>
+      <div className="absolute top-6 right-6 text-gold/30 text-4xl pointer-events-none">╗</div>
+      <div className="absolute bottom-6 left-6 text-gold/30 text-4xl pointer-events-none">╚</div>
+      <div className="absolute bottom-6 right-6 text-gold/30 text-4xl pointer-events-none">╝</div>
+
+      <div className="max-w-4xl w-full px-6 z-10">
         <div className="space-y-8 text-center">
-          
-          {/* Online Status Badge */}
-          <div className="inline-flex items-center gap-2 bg-blue-50 border border-blue-100 px-4 py-1.5 rounded-full text-blue-700 font-mono text-sm">
+          {/* Status Badge */}
+          <div className="inline-flex items-center gap-2 bg-dark-wood/10 border border-gold/40 px-5 py-2 rounded-full">
             <span className="relative flex h-2 w-2">
-              <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-blue-400 opacity-75"></span>
-              <span className="relative inline-flex rounded-full h-2 w-2 bg-blue-600"></span>
+              <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-forest opacity-75" />
+              <span className="relative inline-flex rounded-full h-2 w-2 bg-forest" />
             </span>
-            System Online: Available for Agentic AI Projects
+            <span className="text-dark-wood font-[family-name:var(--font-heading)] text-xs tracking-[0.15em] uppercase">
+              Available for Quests
+            </span>
           </div>
 
-          {/* Main Headline */}
-          <div className="space-y-4">
-            <h1 className="text-5xl md:text-7xl font-extrabold text-slate-900 tracking-tight">
-              Software & <br />
-              <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-cyan-500">
-                Automation Engineer
+          {/* Main Title */}
+          <div className="space-y-4 animate-fade-in-up">
+            <h1 className="text-5xl md:text-7xl font-[family-name:var(--font-heading)] font-bold tracking-tight">
+              <span className="text-dark-wood block">
+                {config?.heroTitle?.split(' ').slice(0, -1).join(' ') || 'Software &'}
+              </span>
+              <span className="text-gold-gradient block mt-2">
+                {config?.heroTitle?.split(' ').slice(-1)[0] || 'Engineer'}
               </span>
             </h1>
 
-            <p className="text-xl text-slate-600 max-auto max-w-2xl mx-auto leading-relaxed">
-              Engineering high-performance <strong>Agentic AI</strong> systems and 
-              autonomous <strong>Company as a Service</strong> tools. Built with the speed of Bun.
+            <p className="text-lg md:text-xl text-iron max-w-2xl mx-auto leading-relaxed">
+              {config?.heroSubtitle || 'Forging digital solutions in the fires of innovation — crafting Agentic AI systems and Company as a Service tools.'}
             </p>
           </div>
 
-          {/* Primary Actions */}
-          <div className="flex flex-wrap justify-center gap-4 pt-4">
-            <button 
+          {/* Decorative Divider */}
+          <div className="flex items-center justify-center gap-4">
+            <div className="h-px w-16 bg-gradient-to-r from-transparent to-gold" />
+            <span className="text-gold text-xl">⚔️</span>
+            <div className="h-px w-16 bg-gradient-to-l from-transparent to-gold" />
+          </div>
+
+          {/* CTA Buttons */}
+          <div className="flex flex-wrap justify-center gap-4 pt-2">
+            <button
               onClick={() => scrollTo('skills')}
-              className="group flex items-center gap-2 bg-slate-900 text-white px-8 py-4 rounded-xl font-semibold hover:bg-slate-800 transition-all shadow-xl hover:shadow-blue-200/50"
+              className="medieval-btn"
             >
-              View Tech Stack
-              <ArrowRight size={18} className="group-hover:translate-x-1 transition-transform" />
+              🛡️ View Arsenal
             </button>
-            
-            <button 
+            <button
               onClick={() => scrollTo('experience')}
-              className="flex items-center gap-2 bg-white border border-slate-200 text-slate-900 px-8 py-4 rounded-xl font-semibold hover:border-blue-400 hover:text-blue-600 transition-all"
+              className="medieval-btn-outline"
             >
-              Professional History
+              📜 Chronicles
             </button>
           </div>
 
-          {/* Quick Stats / Tech Breadcrumbs */}
-          <div className="pt-12 flex justify-center items-center gap-8 text-slate-400">
-            <div className="flex items-center gap-2 group cursor-default">
-              <Terminal size={20} className="group-hover:text-blue-500 transition-colors" />
-              <span className="text-xs font-mono tracking-widest uppercase">Bun / TS / Next.js</span>
-            </div>
-            <div className="flex items-center gap-2 group cursor-default">
-              <Cpu size={20} className="group-hover:text-blue-500 transition-colors" />
-              <span className="text-xs font-mono tracking-widest uppercase">Agentic AI Design</span>
-            </div>
+          {/* Tech breadcrumbs */}
+          <div className="pt-8 flex flex-wrap justify-center items-center gap-6 text-iron-light">
+            {['Bun / TypeScript', 'Agentic AI', 'Docker / DevOps'].map((tech) => (
+              <div key={tech} className="flex items-center gap-2 group cursor-default">
+                <span className="text-gold/60 group-hover:text-gold transition-colors">✦</span>
+                <span className="text-xs font-[family-name:var(--font-heading)] tracking-[0.15em] uppercase">
+                  {tech}
+                </span>
+              </div>
+            ))}
           </div>
         </div>
       </div>

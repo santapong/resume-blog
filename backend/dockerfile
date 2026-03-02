@@ -1,0 +1,35 @@
+# Stage 1: Install dependencies
+FROM oven/bun:latest AS deps
+WORKDIR /app
+
+COPY package.json bun.lock* ./
+RUN bun install --frozen-lockfile || bun install
+
+# Stage 2: Generate Prisma client and build
+FROM oven/bun:latest AS builder
+WORKDIR /app
+COPY --from=deps /app/node_modules ./node_modules
+COPY . .
+
+RUN bunx prisma generate
+RUN bunx prisma db push
+
+# Stage 3: Production runner
+FROM oven/bun:latest AS runner
+WORKDIR /app
+
+ENV NODE_ENV=production
+ENV PORT=12001
+
+COPY --from=builder /app/node_modules ./node_modules
+COPY --from=builder /app/prisma ./prisma
+COPY --from=builder /app/src ./src
+COPY --from=builder /app/package.json ./
+COPY --from=builder /app/.env ./.env
+
+# Create uploads directory
+RUN mkdir -p uploads/resumes
+
+EXPOSE 12001
+
+CMD ["bun", "src/index.ts"]
