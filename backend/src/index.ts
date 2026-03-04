@@ -7,6 +7,7 @@ import { projectsRouter } from './routes/projects';
 import { resumeRouter } from './routes/resume';
 import { authRouter } from './routes/auth';
 import { configRouter } from './routes/config';
+import { socialsRouter } from './routes/socials';
 
 const app = express();
 const PORT = process.env.PORT || 12001;
@@ -25,6 +26,7 @@ app.use('/api/projects', projectsRouter);
 app.use('/api/resume', resumeRouter);
 app.use('/api/auth', authRouter);
 app.use('/api/config', configRouter);
+app.use('/api/socials', socialsRouter);
 
 // Health check
 app.get('/api/health', (_req, res) => {

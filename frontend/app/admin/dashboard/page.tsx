@@ -7,10 +7,11 @@ import {
     getSkills, createSkill, updateSkill, deleteSkill,
     getProjects, createProject, updateProject, deleteProject,
     uploadResume, getResume, getConfig, updateConfig,
-    type Experience, type Skill, type Project, type ResumeInfo, type SiteConfig,
+    getSocials, createSocial, updateSocial, deleteSocial,
+    type Experience, type Skill, type Project, type ResumeInfo, type SiteConfig, type SocialLink,
 } from '@/app/lib/api';
 
-type Tab = 'experiences' | 'skills' | 'projects' | 'resume' | 'config';
+type Tab = 'experiences' | 'skills' | 'projects' | 'resume' | 'config' | 'socials';
 
 export default function AdminDashboard() {
     const router = useRouter();
@@ -20,6 +21,7 @@ export default function AdminDashboard() {
     const [projects, setProjects] = useState<Project[]>([]);
     const [resume, setResume] = useState<ResumeInfo | null>(null);
     const [config, setConfig] = useState<SiteConfig | null>(null);
+    const [socials, setSocials] = useState<SocialLink[]>([]);
     const [message, setMessage] = useState('');
 
     // Auth check
@@ -32,14 +34,15 @@ export default function AdminDashboard() {
 
     const loadData = useCallback(async () => {
         try {
-            const [exp, sk, proj, res, conf] = await Promise.all([
-                getExperiences(), getSkills(), getProjects(), getResume(), getConfig(),
+            const [exp, sk, proj, res, conf, soc] = await Promise.all([
+                getExperiences(), getSkills(), getProjects(), getResume(), getConfig(), getSocials(),
             ]);
             setExperiences(exp);
             setSkills(sk);
             setProjects(proj);
             setResume(res);
             setConfig(conf);
+            setSocials(soc);
         } catch {
             setMessage('Failed to load data.');
         }
@@ -64,6 +67,7 @@ export default function AdminDashboard() {
         { key: 'skills', label: 'Arsenal', icon: '🛡️' },
         { key: 'projects', label: 'Conquests', icon: '⚔️' },
         { key: 'resume', label: 'Decree', icon: '📄' },
+        { key: 'socials', label: 'Ravens', icon: '🐦' },
         { key: 'config', label: 'Config', icon: '⚙️' },
     ];
 
@@ -95,8 +99,8 @@ export default function AdminDashboard() {
                                 key={tab.key}
                                 onClick={() => setActiveTab(tab.key)}
                                 className={`w-full text-left px-3 py-2.5 rounded flex items-center gap-2 text-sm transition-colors ${activeTab === tab.key
-                                        ? 'bg-gold/20 text-gold border border-gold/30'
-                                        : 'text-parchment/60 hover:text-parchment hover:bg-white/5'
+                                    ? 'bg-gold/20 text-gold border border-gold/30'
+                                    : 'text-parchment/60 hover:text-parchment hover:bg-white/5'
                                     }`}
                             >
                                 <span>{tab.icon}</span>
@@ -134,6 +138,13 @@ export default function AdminDashboard() {
                     {activeTab === 'resume' && (
                         <ResumePanel
                             resume={resume}
+                            onRefresh={loadData}
+                            onMessage={showMessage}
+                        />
+                    )}
+                    {activeTab === 'socials' && (
+                        <SocialsPanel
+                            socials={socials}
                             onRefresh={loadData}
                             onMessage={showMessage}
                         />
@@ -639,6 +650,111 @@ function ConfigPanel({
                     💾 Save Configuration
                 </button>
             </form>
+        </div>
+    );
+}
+
+// ─── Socials Panel ──────────────────────────────────────────────
+function SocialsPanel({
+    socials,
+    onRefresh,
+    onMessage,
+}: {
+    socials: SocialLink[];
+    onRefresh: () => void;
+    onMessage: (msg: string) => void;
+}) {
+    const [showForm, setShowForm] = useState(false);
+    const [editing, setEditing] = useState<SocialLink | null>(null);
+    const [form, setForm] = useState({ platform: '', url: '', icon: '🔗', order: 0 });
+
+    const resetForm = () => {
+        setForm({ platform: '', url: '', icon: '🔗', order: 0 });
+        setEditing(null);
+        setShowForm(false);
+    };
+
+    const startEdit = (social: SocialLink) => {
+        setForm({ platform: social.platform, url: social.url, icon: social.icon, order: social.order });
+        setEditing(social);
+        setShowForm(true);
+    };
+
+    const handleSubmit = async (e: React.FormEvent) => {
+        e.preventDefault();
+        try {
+            if (editing) {
+                await updateSocial(editing.id, form);
+                onMessage('Raven updated!');
+            } else {
+                await createSocial(form);
+                onMessage('Raven dispatched!');
+            }
+            resetForm();
+            onRefresh();
+        } catch {
+            onMessage('Failed to manage raven.');
+        }
+    };
+
+    const handleDelete = async (id: number) => {
+        if (!confirm('Release this raven?')) return;
+        try {
+            await deleteSocial(id);
+            onMessage('Raven released.');
+            onRefresh();
+        } catch {
+            onMessage('Failed to release raven.');
+        }
+    };
+
+    return (
+        <div>
+            <div className="flex justify-between items-center mb-6">
+                <h2 className="font-heading text-xl text-gold tracking-wider">
+                    🐦 Ravens (Social Links)
+                </h2>
+                <button onClick={() => { resetForm(); setShowForm(!showForm); }} className="medieval-btn text-xs py-2!">
+                    {showForm ? '✕ Cancel' : '+ Add Raven'}
+                </button>
+            </div>
+
+            {showForm && (
+                <form onSubmit={handleSubmit} className="scroll-card p-6 mb-6 space-y-4">
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <input value={form.platform} onChange={e => setForm({ ...form, platform: e.target.value })} placeholder="Platform (e.g. GitHub, LinkedIn)" required
+                            className="px-3 py-2 bg-parchment-light border border-gold/40 rounded text-dark-wood text-sm focus:outline-none focus:border-gold" />
+                        <input value={form.url} onChange={e => setForm({ ...form, url: e.target.value })} placeholder="URL (e.g. https://github.com/user)" required
+                            className="px-3 py-2 bg-parchment-light border border-gold/40 rounded text-dark-wood text-sm focus:outline-none focus:border-gold" />
+                        <input value={form.icon} onChange={e => setForm({ ...form, icon: e.target.value })} placeholder="Icon emoji (e.g. 🐙)"
+                            className="px-3 py-2 bg-parchment-light border border-gold/40 rounded text-dark-wood text-sm w-24 focus:outline-none focus:border-gold" />
+                        <input type="number" value={form.order} onChange={e => setForm({ ...form, order: parseInt(e.target.value) || 0 })} placeholder="Order"
+                            className="px-3 py-2 bg-parchment-light border border-gold/40 rounded text-dark-wood text-sm w-24 focus:outline-none focus:border-gold" />
+                    </div>
+                    <button type="submit" className="medieval-btn text-xs py-2!">
+                        {editing ? '✏️ Update' : '🐦 Dispatch Raven'}
+                    </button>
+                </form>
+            )}
+
+            <div className="space-y-3">
+                {socials.map(social => (
+                    <div key={social.id} className="bg-dark-wood-light border border-gold/20 rounded p-4 flex justify-between items-center">
+                        <div className="flex items-center gap-3">
+                            <span className="text-2xl">{social.icon}</span>
+                            <div>
+                                <h3 className="text-gold font-heading text-sm font-bold">{social.platform}</h3>
+                                <p className="text-parchment/40 text-xs truncate max-w-xs">{social.url}</p>
+                            </div>
+                        </div>
+                        <div className="flex gap-2 ml-4">
+                            <button onClick={() => startEdit(social)} className="text-gold/70 hover:text-gold text-xs">✏️</button>
+                            <button onClick={() => handleDelete(social.id)} className="text-crimson/70 hover:text-crimson text-xs">🗑️</button>
+                        </div>
+                    </div>
+                ))}
+                {socials.length === 0 && <p className="text-parchment/40 text-sm text-center py-8">No ravens yet. Add social links to appear in the footer and contact section.</p>}
+            </div>
         </div>
     );
 }

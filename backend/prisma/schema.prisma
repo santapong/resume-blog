@@ -51,3 +51,11 @@ model SiteConfig {
   heroSubtitle String @default("")
   aboutText    String @default("")
 }
+
+model SocialLink {
+  id       Int    @id @default(autoincrement())
+  platform String // github, linkedin, email, twitter, etc.
+  url      String
+  icon     String @default("🔗")
+  order    Int    @default(0)
+}

@@ -204,3 +204,47 @@ export async function updateConfig(data: Partial<SiteConfig>): Promise<SiteConfi
     if (!res.ok) throw new Error('Failed to update config');
     return res.json();
 }
+
+// ─── Social Links ────────────────────────────────────────────────
+export interface SocialLink {
+    id: number;
+    platform: string;
+    url: string;
+    icon: string;
+    order: number;
+}
+
+export async function getSocials(): Promise<SocialLink[]> {
+    const res = await fetch(`${API_URL}/socials`, { cache: 'no-store' });
+    if (!res.ok) return [];
+    return res.json();
+}
+
+export async function createSocial(data: Partial<SocialLink>): Promise<SocialLink> {
+    const res = await fetch(`${API_URL}/socials`, {
+        method: 'POST',
+        headers: getAuthHeaders(),
+        body: JSON.stringify(data),
+    });
+    if (!res.ok) throw new Error('Failed to create social link');
+    return res.json();
+}
+
+export async function updateSocial(id: number, data: Partial<SocialLink>): Promise<SocialLink> {
+    const res = await fetch(`${API_URL}/socials/${id}`, {
+        method: 'PUT',
+        headers: getAuthHeaders(),
+        body: JSON.stringify(data),
+    });
+    if (!res.ok) throw new Error('Failed to update social link');
+    return res.json();
+}
+
+export async function deleteSocial(id: number): Promise<void> {
+    const res = await fetch(`${API_URL}/socials/${id}`, {
+        method: 'DELETE',
+        headers: getAuthHeaders(),
+    });
+    if (!res.ok) throw new Error('Failed to delete social link');
+}
+

@@ -1,24 +1,22 @@
-import Hero from '@/app/components/Hero';
-import Skills from '@/app/components/Skills';
-import Experience from '@/app/components/Experience';
+import Hero from './components/Hero';
+import Skills from './components/Skills';
+import Experience from './components/Experience';
+import StatsCounter from './components/StatsCounter';
+import ContactSection from './components/ContactSection';
 
 export const metadata = {
-  title: 'The Grand Hall | Medieval Portfolio',
-  description: 'A knight\'s portfolio — showcasing skills, experience, and conquests in software engineering.',
+  title: 'Portfolio — The Grand Hall',
+  description: 'A knight\'s portfolio, forged in code and presented upon digital parchment. Software & Automation Engineer specializing in Agentic AI and modern web technologies.',
 };
 
-export default function HomePage() {
+export default function Home() {
   return (
-    <main className="flex flex-col min-h-screen">
+    <>
       <Hero />
-
-      <section id="skills">
-        <Skills />
-      </section>
-
-      <section id="experience">
-        <Experience />
-      </section>
-    </main>
+      <Skills />
+      <StatsCounter />
+      <Experience />
+      <ContactSection />
+    </>
   );
 }
