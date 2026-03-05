@@ -35,7 +35,7 @@ export default function AdminLoginPage() {
     };
 
     return (
-        <main className="min-h-screen bg-dark-wood flex items-center justify-center px-6 relative overflow-hidden">
+        <main className="min-h-screen bg-parchment-texture flex items-center justify-center px-6 relative overflow-hidden">
             {/* Background accents */}
             <div className="absolute top-20 left-20 w-60 h-60 bg-gold/5 rounded-full blur-3xl pointer-events-none" />
             <div className="absolute bottom-20 right-20 w-40 h-40 bg-crimson/5 rounded-full blur-3xl pointer-events-none" />
@@ -47,13 +47,13 @@ export default function AdminLoginPage() {
                     <h1 className="font-[family-name:var(--font-heading)] text-3xl font-bold text-gold mb-2">
                         The Gatehouse
                     </h1>
-                    <p className="text-parchment/60 text-sm">
+                    <p className="text-iron-light text-sm">
                         Speak the words of passage to enter the admin chamber
                     </p>
                 </div>
 
                 {/* Login Form */}
-                <form onSubmit={handleSubmit} className="scroll-card p-8 space-y-6">
+                <form onSubmit={handleSubmit} className="scroll-card glass-card p-8 space-y-6">
                     {error && (
                         <div className="bg-crimson/10 border border-crimson/30 text-crimson px-4 py-3 rounded text-sm">
                             ⚠️ {error}
@@ -68,7 +68,7 @@ export default function AdminLoginPage() {
                             type="text"
                             value={username}
                             onChange={(e) => setUsername(e.target.value)}
-                            className="w-full px-4 py-3 bg-parchment-light border border-gold/40 rounded text-dark-wood focus:outline-none focus:border-gold focus:ring-1 focus:ring-gold transition-colors"
+                            className="w-full px-4 py-3 bg-aged-paper/80 border border-gold/40 rounded text-dark-wood focus:outline-none focus:border-gold focus:ring-1 focus:ring-gold transition-colors"
                             placeholder="Enter thy name..."
                             required
                         />
@@ -82,7 +82,7 @@ export default function AdminLoginPage() {
                             type="password"
                             value={password}
                             onChange={(e) => setPassword(e.target.value)}
-                            className="w-full px-4 py-3 bg-parchment-light border border-gold/40 rounded text-dark-wood focus:outline-none focus:border-gold focus:ring-1 focus:ring-gold transition-colors"
+                            className="w-full px-4 py-3 bg-aged-paper/80 border border-gold/40 rounded text-dark-wood focus:outline-none focus:border-gold focus:ring-1 focus:ring-gold transition-colors"
                             placeholder="Speak the secret word..."
                             required
                         />

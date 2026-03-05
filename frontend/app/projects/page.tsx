@@ -4,12 +4,10 @@ import React, { useEffect, useState } from 'react';
 import { getProjects, type Project } from '@/app/lib/api';
 import ScrollReveal from '@/app/components/ScrollReveal';
 
-type Filter = 'all' | 'featured';
-
 export default function ProjectsPage() {
     const [projects, setProjects] = useState<Project[]>([]);
     const [loading, setLoading] = useState(true);
-    const [filter, setFilter] = useState<Filter>('all');
+    const [filter, setFilter] = useState<'all' | 'featured'>('all');
 
     useEffect(() => {
         getProjects()
@@ -18,146 +16,153 @@ export default function ProjectsPage() {
             .finally(() => setLoading(false));
     }, []);
 
-    const filteredProjects = filter === 'featured'
-        ? projects.filter(p => p.featured)
-        : projects;
+    const filteredProjects = projects.filter(p => filter === 'all' || (filter === 'featured' && p.featured));
 
     return (
-        <main className="min-h-screen bg-parchment-texture">
-            {/* Header Section */}
-            <section className="py-16 px-6 relative overflow-hidden">
+        <main className="min-h-screen bg-parchment-texture text-dark-wood">
+            <section className="pt-32 pb-24 px-6 relative overflow-hidden">
                 {/* Background glow */}
-                <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[500px] h-[300px] bg-gold/5 blur-3xl pointer-events-none" />
+                <div className="absolute top-20 left-1/2 -translate-x-1/2 w-[600px] h-[400px] bg-crimson-light/5 blur-[100px] pointer-events-none" />
 
-                <div className="max-w-6xl mx-auto text-center relative z-10">
+                <div className="max-w-6xl mx-auto relative z-10">
                     <ScrollReveal>
-                        <h1 className="section-heading mb-4">Gallery of Conquests</h1>
-                        <p className="text-iron max-w-2xl mx-auto mb-8">
-                            Behold the works forged in the fires of innovation — each project a testament to skill and determination.
+                        <h1 className="section-heading mb-4">Artifacts & Enchantments</h1>
+                        <p className="text-center text-iron max-w-2xl mx-auto mb-12 text-[15px] leading-relaxed">
+                            A collection of mystical creations, artifacts woven from logic and spells,
+                            each representing a quest undertaken and deep knowledge gained over centuries.
                         </p>
                     </ScrollReveal>
 
                     {/* Filter Tabs */}
-                    {projects.some(p => p.featured) && (
-                        <ScrollReveal delay={200}>
-                            <div className="inline-flex border border-gold/40 rounded overflow-hidden">
-                                <button
-                                    onClick={() => setFilter('all')}
-                                    className={`px-6 py-2 font-heading text-xs tracking-wider uppercase transition-all duration-300 ${filter === 'all'
-                                            ? 'bg-gold text-dark-wood'
-                                            : 'text-iron hover:bg-gold/10'
-                                        }`}
-                                >
-                                    All Conquests
-                                </button>
-                                <button
-                                    onClick={() => setFilter('featured')}
-                                    className={`px-6 py-2 font-heading text-xs tracking-wider uppercase transition-all duration-300 ${filter === 'featured'
-                                            ? 'bg-gold text-dark-wood'
-                                            : 'text-iron hover:bg-gold/10'
-                                        }`}
-                                >
-                                    ⭐ Featured
-                                </button>
-                            </div>
-                        </ScrollReveal>
-                    )}
-                </div>
-            </section>
+                    <ScrollReveal delay={150}>
+                        <div className="flex justify-center gap-4 mb-16">
+                            <button
+                                onClick={() => setFilter('all')}
+                                className={`px-6 py-2 rounded-full font-heading text-sm tracking-wide transition-all ${filter === 'all'
+                                    ? 'bg-dark-wood text-parchment-light shadow-md'
+                                    : 'bg-parchment border border-gold-light/40 text-iron hover:bg-aged-paper hover:text-dark-wood'
+                                    }`}
+                            >
+                                All Grimoires
+                            </button>
+                            <button
+                                onClick={() => setFilter('featured')}
+                                className={`px-6 py-2 rounded-full font-heading text-sm tracking-wide transition-all flex items-center gap-2 ${filter === 'featured'
+                                    ? 'bg-linear-to-r from-gold to-gold-dark text-parchment-light shadow-md shadow-gold/20'
+                                    : 'bg-parchment border border-gold-light/40 text-iron hover:bg-aged-paper hover:text-dark-wood'
+                                    }`}
+                            >
+                                ✨ Legendary Artifacts
+                            </button>
+                        </div>
+                    </ScrollReveal>
 
-            {/* Projects Grid */}
-            <section className="pb-20 px-6">
-                <div className="max-w-6xl mx-auto">
                     {loading ? (
                         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
                             {[1, 2, 3].map(i => (
-                                <div key={i} className="skeleton h-80 rounded" />
+                                <div key={i} className="scroll-card h-[450px]">
+                                    <div className="skeleton h-48 rounded-t-lg" />
+                                    <div className="p-6 space-y-4">
+                                        <div className="skeleton h-6 w-3/4 rounded" />
+                                        <div className="skeleton h-4 w-full rounded" />
+                                        <div className="skeleton h-4 w-5/6 rounded" />
+                                        <div className="pt-4 flex gap-2">
+                                            <div className="skeleton h-6 w-16 rounded-full" />
+                                            <div className="skeleton h-6 w-16 rounded-full" />
+                                        </div>
+                                    </div>
+                                </div>
                             ))}
                         </div>
                     ) : filteredProjects.length === 0 ? (
-                        <div className="text-center py-20">
-                            <div className="text-6xl mb-4">🏰</div>
-                            <p className="font-heading text-xl text-dark-wood mb-2">
-                                {filter === 'featured' ? 'No Featured Conquests' : 'The Gallery Awaits'}
-                            </p>
-                            <p className="text-iron">
-                                {filter === 'featured'
-                                    ? 'No conquests have been marked as featured yet.'
-                                    : 'No conquests have been recorded yet. Return soon to witness great feats.'}
+                        <div className="text-center py-32 scroll-card glass-card">
+                            <div className="text-6xl mb-6 opacity-80">📖</div>
+                            <h3 className="font-heading text-2xl text-dark-wood mb-3">No Scrolls Found</h3>
+                            <p className="text-iron max-w-sm mx-auto">
+                                The grand library seems empty of such artifacts at this moment.
+                                Perhaps the scribes are still working on them.
                             </p>
                         </div>
                     ) : (
                         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
                             {filteredProjects.map((project, index) => (
-                                <ScrollReveal key={project.id} delay={index * 100} variant="scale">
-                                    <div
-                                        className={`scroll-card overflow-hidden group ${project.featured ? 'ring-2 ring-gold' : ''
-                                            }`}
-                                    >
-                                        {/* Featured Badge */}
-                                        {project.featured && (
-                                            <div className="bg-gold text-dark-wood text-xs font-heading font-bold tracking-wider uppercase px-3 py-1.5 text-center">
-                                                ⭐ Featured Conquest
-                                            </div>
-                                        )}
+                                <ScrollReveal key={project.id} delay={index * 150} variant="scale">
+                                    <div className="scroll-card group h-full flex flex-col hover:border-crimson-light/40">
+                                        {/* Image Section */}
+                                        <div className="relative h-56 overflow-hidden bg-aged-paper border-b border-gold-light/30 rounded-t-lg">
+                                            {project.imageUrl ? (
+                                                <>
+                                                    <img
+                                                        src={project.imageUrl}
+                                                        alt={project.title}
+                                                        className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
+                                                    />
+                                                    <div className="absolute inset-0 bg-linear-to-t from-dark-wood/80 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+                                                </>
+                                            ) : (
+                                                <div className="w-full h-full flex items-center justify-center bg-dark-texture">
+                                                    <span className="text-5xl opacity-40 filter drop-shadow">📜</span>
+                                                </div>
+                                            )}
 
-                                        {/* Image with hover zoom */}
-                                        {project.imageUrl ? (
-                                            <div className="h-48 overflow-hidden relative">
-                                                <img
-                                                    src={project.imageUrl}
-                                                    alt={project.title}
-                                                    className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
-                                                />
-                                                <div className="absolute inset-0 bg-linear-to-t from-dark-wood/50 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
-                                            </div>
-                                        ) : (
-                                            <div className="h-48 bg-dark-wood/10 flex items-center justify-center relative overflow-hidden">
-                                                <div className="absolute inset-0 bg-linear-to-br from-gold/5 to-crimson/5" />
-                                                <span className="text-5xl opacity-30 transition-transform duration-500 group-hover:scale-125 group-hover:rotate-12">⚔️</span>
-                                            </div>
-                                        )}
+                                            {/* Featured Badge */}
+                                            {project.featured && (
+                                                <div className="absolute top-3 right-3 bg-linear-to-r from-gold to-gold-dark text-parchment-light px-3 py-1 text-xs font-bold rounded-full shadow-lg border border-gold-light">
+                                                    ✨ Artifact
+                                                </div>
+                                            )}
+                                        </div>
 
-                                        {/* Content */}
-                                        <div className="p-6">
-                                            <h3 className="font-heading text-lg font-bold text-dark-wood mb-2 group-hover:text-crimson transition-colors duration-300">
+                                        {/* Content Section */}
+                                        <div className="p-6 flex flex-col flex-grow">
+                                            <h3 className="font-heading text-xl text-dark-wood font-bold mb-3 group-hover:text-crimson transition-colors">
                                                 {project.title}
                                             </h3>
-                                            <p className="text-iron text-sm leading-relaxed mb-4 line-clamp-3">
+                                            <p className="text-iron text-sm mb-6 flex-grow leading-relaxed">
                                                 {project.description}
                                             </p>
 
-                                            {/* Technologies */}
-                                            <div className="flex flex-wrap gap-1.5 mb-4">
-                                                {project.technologies.map((tech: string) => (
-                                                    <span key={tech} className="iron-tag text-[10px]">
-                                                        {tech}
-                                                    </span>
-                                                ))}
-                                            </div>
+                                            <div className="space-y-6 mt-auto">
+                                                {/* Built with */}
+                                                <div>
+                                                    <p className="text-[10px] text-iron-light uppercase font-bold tracking-wider mb-2">Incantations & Runes</p>
+                                                    <div className="flex flex-wrap gap-1.5">
+                                                        {project.technologies.slice(0, 4).map((tech: string) => (
+                                                            <span key={tech} className="iron-tag text-[10px] border-none bg-parchment-light">
+                                                                {tech}
+                                                            </span>
+                                                        ))}
+                                                        {project.technologies.length > 4 && (
+                                                            <span className="iron-tag text-[10px] border-none bg-parchment-light">
+                                                                +{project.technologies.length - 4} more
+                                                            </span>
+                                                        )}
+                                                    </div>
+                                                </div>
 
-                                            {/* Links */}
-                                            <div className="flex gap-3">
-                                                {project.liveUrl && (
-                                                    <a
-                                                        href={project.liveUrl}
-                                                        target="_blank"
-                                                        rel="noopener noreferrer"
-                                                        className="medieval-btn text-xs py-2! px-4!"
-                                                    >
-                                                        🌐 View Live
-                                                    </a>
-                                                )}
-                                                {project.repoUrl && (
-                                                    <a
-                                                        href={project.repoUrl}
-                                                        target="_blank"
-                                                        rel="noopener noreferrer"
-                                                        className="medieval-btn-outline text-xs py-2! px-4!"
-                                                    >
-                                                        📂 Source
-                                                    </a>
-                                                )}
+                                                {/* Links */}
+                                                <div className="flex gap-4 pt-4 border-t border-iron-light/20">
+                                                    {project.liveUrl && (
+                                                        <a
+                                                            href={project.liveUrl}
+                                                            target="_blank"
+                                                            rel="noopener noreferrer"
+                                                            className="text-sm font-heading font-bold text-crimson hover:text-crimson-light transition-colors flex items-center gap-1"
+                                                        >
+                                                            <span>🌐</span> Scry View
+                                                        </a>
+                                                    )}
+                                                    {project.repoUrl && (
+                                                        <a
+                                                            href={project.repoUrl}
+                                                            target="_blank"
+                                                            rel="noopener noreferrer"
+                                                            className="text-sm font-heading font-bold text-gold-dark hover:text-gold transition-colors flex items-center gap-1"
+                                                        >
+                                                            <span>📜</span> View Tome
+                                                        </a>
+                                                    )}
+                                                </div>
                                             </div>
                                         </div>
                                     </div>

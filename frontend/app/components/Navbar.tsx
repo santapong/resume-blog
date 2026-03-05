@@ -1,102 +1,115 @@
 "use client";
 
+import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
-import { useState, useEffect } from 'react';
 import { usePathname } from 'next/navigation';
 
 export default function Navbar() {
-    const [isOpen, setIsOpen] = useState(false);
     const [scrolled, setScrolled] = useState(false);
+    const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
     const pathname = usePathname();
 
     useEffect(() => {
-        const handleScroll = () => setScrolled(window.scrollY > 40);
-        window.addEventListener('scroll', handleScroll, { passive: true });
+        const handleScroll = () => {
+            setScrolled(window.scrollY > 20);
+        };
+        window.addEventListener('scroll', handleScroll);
         return () => window.removeEventListener('scroll', handleScroll);
     }, []);
 
-    const navLinks = [
-        { href: '/', label: 'Grand Hall', icon: '🏰' },
-        { href: '/projects', label: 'Conquests', icon: '⚔️' },
-        { href: '/resume', label: 'Royal Decree', icon: '📜' },
+    const links = [
+        { name: 'Grand Hall', path: '/' },
+        { name: 'Scrolls of Magic', path: '/projects' },
+        { name: 'Certification', path: '/resume' },
     ];
 
+    const isActive = (path: string) => pathname === path;
+
     return (
-        <nav className={`sticky top-0 z-50 transition-all duration-500 border-b-2 border-gold ${scrolled
-                ? 'bg-dark-wood shadow-[0_4px_20px_rgba(212,168,67,0.15)]'
-                : 'bg-dark-wood/90 backdrop-blur-md'
-            }`}>
-            <div className="max-w-6xl mx-auto px-4 sm:px-6">
-                <div className="flex justify-between items-center h-16">
-                    {/* Logo */}
-                    <Link href="/" className="flex items-center gap-2 group">
-                        <span className="text-2xl transition-transform duration-300 group-hover:rotate-12">⚜️</span>
-                        <span className="font-heading text-gold font-bold text-lg tracking-wider group-hover:text-gold-light transition-colors">
-                            PORTFOLIO
-                        </span>
-                    </Link>
+        <header
+            className={`fixed top-0 left-0 right-0 w-full z-50 transition-all duration-700 ease-in-out ${scrolled
+                ? 'bg-parchment/90 backdrop-blur-xl border-b border-gold-light/20 shadow-lg shadow-black/30 py-4'
+                : 'bg-transparent py-8'
+                }`}
+        >
+            <div className="max-w-6xl mx-auto px-6 flex justify-between items-center">
+                {/* Logo/Mark */}
+                <Link href="/" className="flex items-center gap-2 group">
+                    <span className={`text-2xl transition-transform duration-700 ease-out group-hover:rotate-180 ${scrolled ? 'text-gold-light' : 'text-gold-light'}`}>
+                        ✧
+                    </span>
+                    <span className={`font-heading text-xl uppercase tracking-widest font-bold transition-colors ${scrolled ? 'text-dark-wood' : 'text-dark-wood'}`}>
+                        Mage's Mark
+                    </span>
+                </Link>
 
-                    {/* Desktop Nav */}
-                    <div className="hidden md:flex items-center gap-1">
-                        {navLinks.map((link) => {
-                            const isActive = pathname === link.href;
-                            return (
-                                <Link
-                                    key={link.href}
-                                    href={link.href}
-                                    className={`flex items-center gap-2 px-4 py-2 rounded transition-all duration-300 font-heading text-sm tracking-wider uppercase ${isActive
-                                            ? 'text-gold bg-gold/10 border border-gold/30'
-                                            : 'text-parchment/70 hover:text-gold hover:bg-gold/5'
-                                        }`}
-                                >
-                                    <span className={`transition-transform duration-300 ${isActive ? 'scale-110' : 'group-hover:scale-110'}`}>{link.icon}</span>
-                                    {link.label}
-                                </Link>
-                            );
-                        })}
-                    </div>
-
-                    {/* Mobile Menu Button */}
-                    <button
-                        onClick={() => setIsOpen(!isOpen)}
-                        className="md:hidden text-parchment p-2 hover:text-gold transition-colors"
-                        aria-label="Toggle menu"
+                {/* Desktop Nav */}
+                <nav className="hidden md:flex items-center gap-8">
+                    {links.map((link) => (
+                        <Link
+                            key={link.name}
+                            href={link.path}
+                            className={`font-heading text-sm uppercase tracking-[0.15em] transition-all duration-300 relative group px-2 py-1 ${isActive(link.path)
+                                ? (scrolled ? 'text-crimson' : 'text-crimson')
+                                : (scrolled ? 'text-iron hover:text-dark-wood' : 'text-iron hover:text-dark-wood')
+                                }`}
+                        >
+                            <span className="relative z-10">{link.name}</span>
+                            {/* Active/Hover Underline */}
+                            <span className={`absolute bottom-0 left-0 h-px bg-current transition-all duration-300 ${isActive(link.path) ? 'w-full opacity-100' : 'w-0 opacity-0 group-hover:w-full group-hover:opacity-50'}`} />
+                        </Link>
+                    ))}
+                    <a
+                        href="/#contact"
+                        className={`font-heading text-xs uppercase tracking-[0.15em] font-bold px-5 py-2 rounded-full border transition-all duration-300 ${scrolled
+                            ? 'border-gold-light/50 text-gold-light hover:bg-gold-light hover:text-parchment'
+                            : 'border-gold-light/50 text-gold-light hover:bg-gold-light hover:text-parchment'
+                            }`}
                     >
-                        <svg className="w-6 h-6 transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"
-                            style={{ transform: isOpen ? 'rotate(90deg)' : 'rotate(0)' }}>
-                            {isOpen ? (
-                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
-                            ) : (
-                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
-                            )}
-                        </svg>
-                    </button>
-                </div>
+                        Summon Familiar
+                    </a>
+                </nav>
 
-                {/* Mobile Nav */}
-                <div className={`md:hidden overflow-hidden transition-all duration-500 ease-in-out ${isOpen ? 'max-h-96 opacity-100 pb-4' : 'max-h-0 opacity-0'
-                    }`}>
-                    <div className="border-t border-gold/30 pt-4 space-y-1">
-                        {navLinks.map((link) => {
-                            const isActive = pathname === link.href;
-                            return (
-                                <Link
-                                    key={link.href}
-                                    href={link.href}
-                                    onClick={() => setIsOpen(false)}
-                                    className={`flex items-center gap-3 px-4 py-3 rounded transition-all duration-300 font-heading text-sm tracking-wider uppercase ${isActive
-                                            ? 'text-gold bg-gold/10 border border-gold/30'
-                                            : 'text-parchment/70 hover:text-gold hover:bg-gold/5'
-                                        }`}
-                                >
-                                    <span className="text-lg">{link.icon}</span>
-                                    {link.label}
-                                </Link>
-                            );
-                        })}
-                    </div>
+                {/* Mobile Menu Toggle */}
+                <button
+                    className="md:hidden p-2 text-2xl focus:outline-none"
+                    onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+                    aria-label="Toggle menu"
+                >
+                    <span className={scrolled ? 'text-dark-wood' : 'text-dark-wood'}>
+                        {mobileMenuOpen ? '✕' : '☰'}
+                    </span>
+                </button>
+            </div>
+
+            {/* Mobile Nav Overlay */}
+            <div
+                className={`md:hidden fixed inset-0 top-[60px] bg-dark-texture backdrop-blur-xl border-t transition-all duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] ${mobileMenuOpen ? 'border-gold-light/20 opacity-100 visible translate-y-0' : 'border-transparent opacity-0 invisible -translate-y-4'
+                    }`}
+            >
+                <div className="flex flex-col items-center justify-center h-[calc(100vh-60px)] gap-10">
+                    {links.map((link) => (
+                        <Link
+                            key={link.name}
+                            href={link.path}
+                            onClick={() => setMobileMenuOpen(false)}
+                            className={`font-heading text-2xl uppercase tracking-widest ${isActive(link.path)
+                                ? 'text-gold-light border-b-2 border-gold-light pb-2'
+                                : 'text-parchment-light/70 hover:text-parchment-light'
+                                }`}
+                        >
+                            {link.name}
+                        </Link>
+                    ))}
+                    <a
+                        href="/#contact"
+                        onClick={() => setMobileMenuOpen(false)}
+                        className="mt-8 font-heading text-sm uppercase tracking-widest font-bold px-8 py-3 rounded-full border border-gold-light text-gold-light hover:bg-gold-light hover:text-parchment transition-colors"
+                    >
+                        Summon Familiar
+                    </a>
                 </div>
             </div>
-        </nav>
+        </header>
     );
 }

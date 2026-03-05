@@ -1,8 +1,8 @@
-# Resume Blog — Medieval Portfolio
+# Resume Blog — Frieren Theme
 
-> *"A knight's portfolio, forged in code and presented upon digital parchment."*
+> *"A mage's portfolio, woven from logic and presented upon ethereal parchment."*
 
-A full-stack medieval-themed personal portfolio website for showcasing experience, skills, projects, and resume/CV.
+A full-stack Frieren-inspired personal portfolio website for showcasing experience, skills, projects, and a resume/CV.
 
 ## Architecture
 
@@ -27,11 +27,11 @@ resume-blog/
 
 ## Features
 
-- **🏰 Medieval Theme** — Parchment textures, heraldic colors (gold, crimson, dark wood), gothic fonts
-- **⚔️ Experience Timeline** — "Chronicles of Service" with scroll-styled entries
-- **🛡️ Skills Display** — "Ye Olde Arsenal" with shield/banner cards
-- **🎨 Project Gallery** — "Gallery of Conquests" showcasing example projects
-- **📜 Resume Viewer** — "The Royal Decree" with embedded PDF viewer
+- **✨ Ethereal Frieren Theme** — Soft parchment textures, twilight blues, mana cyan sparkles, and elegant gold accents
+- **📖 Journey's Log** — Vertical timeline of experience with pulsing mana nodes
+- **🔮 Grimoire of Knowledge** — Skills display featuring elegant glass cards
+- **📜 Scrolls of Magic** — Project gallery showcasing magical creations and artifacts
+- **📄 Mage's Certification** — Embedded PDF resume viewer
 - **🔐 Admin Panel** — JWT-protected dashboard for managing all content via API
 - **📱 Responsive** — Mobile-first design
 
@@ -40,8 +40,8 @@ resume-blog/
 | Route       | Name                  | Description                          |
 |-------------|-----------------------|--------------------------------------|
 | `/`         | The Grand Hall        | Hero, skills, experience sections    |
-| `/projects` | Gallery of Conquests  | Project showcase grid                |
-| `/resume`   | The Royal Decree      | PDF resume viewer/download           |
+| `/projects` | Scrolls of Magic      | Project showcase grid                |
+| `/resume`   | Mage's Certification  | PDF resume viewer/download           |
 | `/admin`    | The Gatehouse         | Login + content management dashboard |
 
 ## API Endpoints
@@ -66,7 +66,12 @@ resume-blog/
 | GET    | `/api/config`          | No   | Get site configuration   |
 | PUT    | `/api/config`          | Yes  | Update site configuration|
 
-## Development
+## Development & Testing Policy
+
+**CRITICAL POLICY:** When a change or feature is finished, it **MUST** be thoroughly tested for errors, visual bugs (like poor contrast or layout duplication), and logic flaws. 
+If an error or issue is found:
+1. It must be logged immediately in `/errorlog.md`, detailing the issue, root cause, and the fix.
+2. The error must be resolved before presenting the final result.
 
 ```bash
 # Backend
@@ -155,10 +160,10 @@ model SiteConfig {
 
 | Name         | Hex       | Usage                    |
 |--------------|-----------|--------------------------|
-| Parchment    | `#f4e4c1` | Backgrounds              |
-| Dark Wood    | `#2c1810` | Text, headers            |
-| Gold         | `#d4a843` | Accents, borders, CTAs   |
-| Crimson      | `#8b1a1a` | Highlights, hover states |
-| Forest Green | `#2d5a27` | Secondary accents        |
-| Aged Paper   | `#e8d5b0` | Card backgrounds         |
-| Iron         | `#4a4a4a` | Body text                |
+| Parchment    | `#f8fafc` | Ethereal white backgrounds |
+| Dark Wood    | `#1e293b` | Deep slate blue text/headers |
+| Gold         | `#fbbf24` | Accents, borders, magical glows |
+| Mana Cyan    | `#0ea5e9` | Highlights, hover states, auras |
+| Forest Green | `#047857` | Secondary accents        |
+| Aged Paper   | `#e2e8f0` | Cool card backgrounds    |
+| Iron         | `#475569` | Body text                |

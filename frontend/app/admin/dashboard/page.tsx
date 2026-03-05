@@ -72,13 +72,13 @@ export default function AdminDashboard() {
     ];
 
     return (
-        <main className="min-h-screen bg-dark-wood">
+        <main className="min-h-screen bg-aged-paper/30-texture">
             {/* Top Bar */}
-            <div className="bg-dark-wood-light border-b border-gold/30 px-6 py-3 flex justify-between items-center">
+            <div className="bg-aged-paper/50/30 backdrop-blur-sm border-b border-gold/30 px-6 py-3 flex justify-between items-center">
                 <h1 className="font-[family-name:var(--font-heading)] text-gold text-lg tracking-wider">
                     ⚜️ Admin Chamber
                 </h1>
-                <button onClick={handleLogout} className="text-parchment/60 hover:text-crimson text-sm transition-colors">
+                <button onClick={handleLogout} className="text-iron-light hover:text-crimson text-sm transition-colors">
                     🚪 Leave Castle
                 </button>
             </div>
@@ -92,7 +92,7 @@ export default function AdminDashboard() {
 
             <div className="flex">
                 {/* Sidebar */}
-                <aside className="w-56 min-h-[calc(100vh-52px)] bg-dark-wood-light border-r border-gold/20 p-4">
+                <aside className="w-56 min-h-[calc(100vh-52px)] bg-aged-paper/50/30 backdrop-blur-sm border-r border-gold/20 p-4">
                     <nav className="space-y-1">
                         {tabs.map(tab => (
                             <button
@@ -100,7 +100,7 @@ export default function AdminDashboard() {
                                 onClick={() => setActiveTab(tab.key)}
                                 className={`w-full text-left px-3 py-2.5 rounded flex items-center gap-2 text-sm transition-colors ${activeTab === tab.key
                                     ? 'bg-gold/20 text-gold border border-gold/30'
-                                    : 'text-parchment/60 hover:text-parchment hover:bg-white/5'
+                                    : 'text-iron-light hover:text-dark-wood hover:bg-gold-light/5'
                                     }`}
                             >
                                 <span>{tab.icon}</span>
@@ -239,21 +239,21 @@ function ExperiencesPanel({
             </div>
 
             {showForm && (
-                <form onSubmit={handleSubmit} className="scroll-card p-6 mb-6 space-y-4">
+                <form onSubmit={handleSubmit} className="scroll-card glass-card p-6 mb-6 space-y-4">
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                         <input value={form.title} onChange={e => setForm({ ...form, title: e.target.value })} placeholder="Title" required
-                            className="px-3 py-2 bg-parchment-light border border-gold/40 rounded text-dark-wood text-sm focus:outline-none focus:border-gold" />
+                            className="px-3 py-2 bg-aged-paper/50 border border-gold/40 rounded text-dark-wood text-sm focus:outline-none focus:border-gold" />
                         <input value={form.company} onChange={e => setForm({ ...form, company: e.target.value })} placeholder="Company" required
-                            className="px-3 py-2 bg-parchment-light border border-gold/40 rounded text-dark-wood text-sm focus:outline-none focus:border-gold" />
+                            className="px-3 py-2 bg-aged-paper/50 border border-gold/40 rounded text-dark-wood text-sm focus:outline-none focus:border-gold" />
                         <input value={form.period} onChange={e => setForm({ ...form, period: e.target.value })} placeholder="Period (e.g. 2024 - Present)" required
-                            className="px-3 py-2 bg-parchment-light border border-gold/40 rounded text-dark-wood text-sm focus:outline-none focus:border-gold" />
+                            className="px-3 py-2 bg-aged-paper/50 border border-gold/40 rounded text-dark-wood text-sm focus:outline-none focus:border-gold" />
                         <input value={form.technologies} onChange={e => setForm({ ...form, technologies: e.target.value })} placeholder="Technologies (comma-separated)"
-                            className="px-3 py-2 bg-parchment-light border border-gold/40 rounded text-dark-wood text-sm focus:outline-none focus:border-gold" />
+                            className="px-3 py-2 bg-aged-paper/50 border border-gold/40 rounded text-dark-wood text-sm focus:outline-none focus:border-gold" />
                     </div>
                     <textarea value={form.description} onChange={e => setForm({ ...form, description: e.target.value })} placeholder="Description" rows={3} required
-                        className="w-full px-3 py-2 bg-parchment-light border border-gold/40 rounded text-dark-wood text-sm focus:outline-none focus:border-gold" />
+                        className="w-full px-3 py-2 bg-aged-paper/50 border border-gold/40 rounded text-dark-wood text-sm focus:outline-none focus:border-gold" />
                     <input type="number" value={form.order} onChange={e => setForm({ ...form, order: parseInt(e.target.value) || 0 })} placeholder="Order"
-                        className="px-3 py-2 bg-parchment-light border border-gold/40 rounded text-dark-wood text-sm w-24 focus:outline-none focus:border-gold" />
+                        className="px-3 py-2 bg-aged-paper/50 border border-gold/40 rounded text-dark-wood text-sm w-24 focus:outline-none focus:border-gold" />
                     <button type="submit" className="medieval-btn text-xs !py-2">
                         {editing ? '✏️ Update' : '📜 Create'}
                     </button>
@@ -262,11 +262,11 @@ function ExperiencesPanel({
 
             <div className="space-y-3">
                 {experiences.map(exp => (
-                    <div key={exp.id} className="bg-dark-wood-light border border-gold/20 rounded p-4 flex justify-between items-start">
+                    <div key={exp.id} className="bg-aged-paper/50/30 backdrop-blur-sm border border-gold/20 rounded p-4 flex justify-between items-start">
                         <div>
                             <h3 className="text-gold font-[family-name:var(--font-heading)] text-sm font-bold">{exp.title}</h3>
-                            <p className="text-parchment/60 text-xs">{exp.company} · {exp.period}</p>
-                            <p className="text-parchment/40 text-xs mt-1 line-clamp-2">{exp.description}</p>
+                            <p className="text-iron-light text-xs">{exp.company} · {exp.period}</p>
+                            <p className="text-iron-light/60 text-xs mt-1 line-clamp-2">{exp.description}</p>
                         </div>
                         <div className="flex gap-2 ml-4">
                             <button onClick={() => startEdit(exp)} className="text-gold/70 hover:text-gold text-xs">✏️</button>
@@ -274,7 +274,7 @@ function ExperiencesPanel({
                         </div>
                     </div>
                 ))}
-                {experiences.length === 0 && <p className="text-parchment/40 text-sm text-center py-8">No chronicles yet.</p>}
+                {experiences.length === 0 && <p className="text-iron-light/60 text-sm text-center py-8">No chronicles yet.</p>}
             </div>
         </div>
     );
@@ -350,13 +350,13 @@ function SkillsPanel({
             </div>
 
             {showForm && (
-                <form onSubmit={handleSubmit} className="scroll-card p-6 mb-6 space-y-4">
+                <form onSubmit={handleSubmit} className="scroll-card glass-card p-6 mb-6 space-y-4">
                     <input value={form.category} onChange={e => setForm({ ...form, category: e.target.value })} placeholder="Category name" required
-                        className="w-full px-3 py-2 bg-parchment-light border border-gold/40 rounded text-dark-wood text-sm focus:outline-none focus:border-gold" />
+                        className="w-full px-3 py-2 bg-aged-paper/50 border border-gold/40 rounded text-dark-wood text-sm focus:outline-none focus:border-gold" />
                     <textarea value={form.items} onChange={e => setForm({ ...form, items: e.target.value })} placeholder="Skills (comma-separated)" rows={2} required
-                        className="w-full px-3 py-2 bg-parchment-light border border-gold/40 rounded text-dark-wood text-sm focus:outline-none focus:border-gold" />
+                        className="w-full px-3 py-2 bg-aged-paper/50 border border-gold/40 rounded text-dark-wood text-sm focus:outline-none focus:border-gold" />
                     <input type="number" value={form.order} onChange={e => setForm({ ...form, order: parseInt(e.target.value) || 0 })} placeholder="Order"
-                        className="px-3 py-2 bg-parchment-light border border-gold/40 rounded text-dark-wood text-sm w-24 focus:outline-none focus:border-gold" />
+                        className="px-3 py-2 bg-aged-paper/50 border border-gold/40 rounded text-dark-wood text-sm w-24 focus:outline-none focus:border-gold" />
                     <button type="submit" className="medieval-btn text-xs !py-2">
                         {editing ? '✏️ Update' : '🛡️ Create'}
                     </button>
@@ -365,10 +365,10 @@ function SkillsPanel({
 
             <div className="space-y-3">
                 {skills.map(skill => (
-                    <div key={skill.id} className="bg-dark-wood-light border border-gold/20 rounded p-4 flex justify-between items-start">
+                    <div key={skill.id} className="bg-aged-paper/50/30 backdrop-blur-sm border border-gold/20 rounded p-4 flex justify-between items-start">
                         <div>
                             <h3 className="text-gold font-[family-name:var(--font-heading)] text-sm font-bold">{skill.category}</h3>
-                            <p className="text-parchment/40 text-xs mt-1">{skill.items.join(', ')}</p>
+                            <p className="text-iron-light/60 text-xs mt-1">{skill.items.join(', ')}</p>
                         </div>
                         <div className="flex gap-2 ml-4">
                             <button onClick={() => startEdit(skill)} className="text-gold/70 hover:text-gold text-xs">✏️</button>
@@ -376,7 +376,7 @@ function SkillsPanel({
                         </div>
                     </div>
                 ))}
-                {skills.length === 0 && <p className="text-parchment/40 text-sm text-center py-8">No skills yet.</p>}
+                {skills.length === 0 && <p className="text-iron-light/60 text-sm text-center py-8">No skills yet.</p>}
             </div>
         </div>
     );
@@ -467,23 +467,23 @@ function ProjectsPanel({
             </div>
 
             {showForm && (
-                <form onSubmit={handleSubmit} className="scroll-card p-6 mb-6 space-y-4">
+                <form onSubmit={handleSubmit} className="scroll-card glass-card p-6 mb-6 space-y-4">
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                         <input value={form.title} onChange={e => setForm({ ...form, title: e.target.value })} placeholder="Title" required
-                            className="px-3 py-2 bg-parchment-light border border-gold/40 rounded text-dark-wood text-sm focus:outline-none focus:border-gold" />
+                            className="px-3 py-2 bg-aged-paper/50 border border-gold/40 rounded text-dark-wood text-sm focus:outline-none focus:border-gold" />
                         <input value={form.technologies} onChange={e => setForm({ ...form, technologies: e.target.value })} placeholder="Technologies (comma-separated)"
-                            className="px-3 py-2 bg-parchment-light border border-gold/40 rounded text-dark-wood text-sm focus:outline-none focus:border-gold" />
+                            className="px-3 py-2 bg-aged-paper/50 border border-gold/40 rounded text-dark-wood text-sm focus:outline-none focus:border-gold" />
                         <input value={form.imageUrl} onChange={e => setForm({ ...form, imageUrl: e.target.value })} placeholder="Image URL (optional)"
-                            className="px-3 py-2 bg-parchment-light border border-gold/40 rounded text-dark-wood text-sm focus:outline-none focus:border-gold" />
+                            className="px-3 py-2 bg-aged-paper/50 border border-gold/40 rounded text-dark-wood text-sm focus:outline-none focus:border-gold" />
                         <input value={form.liveUrl} onChange={e => setForm({ ...form, liveUrl: e.target.value })} placeholder="Live URL (optional)"
-                            className="px-3 py-2 bg-parchment-light border border-gold/40 rounded text-dark-wood text-sm focus:outline-none focus:border-gold" />
+                            className="px-3 py-2 bg-aged-paper/50 border border-gold/40 rounded text-dark-wood text-sm focus:outline-none focus:border-gold" />
                         <input value={form.repoUrl} onChange={e => setForm({ ...form, repoUrl: e.target.value })} placeholder="Repository URL (optional)"
-                            className="px-3 py-2 bg-parchment-light border border-gold/40 rounded text-dark-wood text-sm focus:outline-none focus:border-gold" />
+                            className="px-3 py-2 bg-aged-paper/50 border border-gold/40 rounded text-dark-wood text-sm focus:outline-none focus:border-gold" />
                         <input type="number" value={form.order} onChange={e => setForm({ ...form, order: parseInt(e.target.value) || 0 })} placeholder="Order"
-                            className="px-3 py-2 bg-parchment-light border border-gold/40 rounded text-dark-wood text-sm w-24 focus:outline-none focus:border-gold" />
+                            className="px-3 py-2 bg-aged-paper/50 border border-gold/40 rounded text-dark-wood text-sm w-24 focus:outline-none focus:border-gold" />
                     </div>
                     <textarea value={form.description} onChange={e => setForm({ ...form, description: e.target.value })} placeholder="Description" rows={3} required
-                        className="w-full px-3 py-2 bg-parchment-light border border-gold/40 rounded text-dark-wood text-sm focus:outline-none focus:border-gold" />
+                        className="w-full px-3 py-2 bg-aged-paper/50 border border-gold/40 rounded text-dark-wood text-sm focus:outline-none focus:border-gold" />
                     <label className="flex items-center gap-2 text-dark-wood text-sm cursor-pointer">
                         <input type="checkbox" checked={form.featured} onChange={e => setForm({ ...form, featured: e.target.checked })} className="accent-gold" />
                         ⭐ Featured Conquest
@@ -496,13 +496,13 @@ function ProjectsPanel({
 
             <div className="space-y-3">
                 {projects.map(proj => (
-                    <div key={proj.id} className="bg-dark-wood-light border border-gold/20 rounded p-4 flex justify-between items-start">
+                    <div key={proj.id} className="bg-aged-paper/50/30 backdrop-blur-sm border border-gold/20 rounded p-4 flex justify-between items-start">
                         <div>
                             <h3 className="text-gold font-[family-name:var(--font-heading)] text-sm font-bold">
                                 {proj.featured && '⭐ '}{proj.title}
                             </h3>
-                            <p className="text-parchment/40 text-xs mt-1 line-clamp-2">{proj.description}</p>
-                            <p className="text-parchment/30 text-xs mt-1">{proj.technologies.join(', ')}</p>
+                            <p className="text-iron-light/60 text-xs mt-1 line-clamp-2">{proj.description}</p>
+                            <p className="text-iron-light/40 text-xs mt-1">{proj.technologies.join(', ')}</p>
                         </div>
                         <div className="flex gap-2 ml-4">
                             <button onClick={() => startEdit(proj)} className="text-gold/70 hover:text-gold text-xs">✏️</button>
@@ -510,7 +510,7 @@ function ProjectsPanel({
                         </div>
                     </div>
                 ))}
-                {projects.length === 0 && <p className="text-parchment/40 text-sm text-center py-8">No conquests yet.</p>}
+                {projects.length === 0 && <p className="text-iron-light/60 text-sm text-center py-8">No conquests yet.</p>}
             </div>
         </div>
     );
@@ -549,7 +549,7 @@ function ResumePanel({
                 📄 Royal Decree (Resume)
             </h2>
 
-            <div className="scroll-card p-6 space-y-6">
+            <div className="scroll-card glass-card p-6 space-y-6">
                 {resume ? (
                     <div className="space-y-3">
                         <p className="text-dark-wood">
@@ -624,27 +624,27 @@ function ConfigPanel({
                 ⚙️ Castle Configuration
             </h2>
 
-            <form onSubmit={handleSubmit} className="scroll-card p-6 space-y-4">
+            <form onSubmit={handleSubmit} className="scroll-card glass-card p-6 space-y-4">
                 <div>
                     <label className="block font-[family-name:var(--font-heading)] text-dark-wood text-sm tracking-wider uppercase mb-2">
                         Hero Title
                     </label>
                     <input value={form.heroTitle} onChange={e => setForm({ ...form, heroTitle: e.target.value })}
-                        className="w-full px-3 py-2 bg-parchment-light border border-gold/40 rounded text-dark-wood text-sm focus:outline-none focus:border-gold" />
+                        className="w-full px-3 py-2 bg-aged-paper/50 border border-gold/40 rounded text-dark-wood text-sm focus:outline-none focus:border-gold" />
                 </div>
                 <div>
                     <label className="block font-[family-name:var(--font-heading)] text-dark-wood text-sm tracking-wider uppercase mb-2">
                         Hero Subtitle
                     </label>
                     <textarea value={form.heroSubtitle} onChange={e => setForm({ ...form, heroSubtitle: e.target.value })} rows={2}
-                        className="w-full px-3 py-2 bg-parchment-light border border-gold/40 rounded text-dark-wood text-sm focus:outline-none focus:border-gold" />
+                        className="w-full px-3 py-2 bg-aged-paper/50 border border-gold/40 rounded text-dark-wood text-sm focus:outline-none focus:border-gold" />
                 </div>
                 <div>
                     <label className="block font-[family-name:var(--font-heading)] text-dark-wood text-sm tracking-wider uppercase mb-2">
                         About Text
                     </label>
                     <textarea value={form.aboutText} onChange={e => setForm({ ...form, aboutText: e.target.value })} rows={4}
-                        className="w-full px-3 py-2 bg-parchment-light border border-gold/40 rounded text-dark-wood text-sm focus:outline-none focus:border-gold" />
+                        className="w-full px-3 py-2 bg-aged-paper/50 border border-gold/40 rounded text-dark-wood text-sm focus:outline-none focus:border-gold" />
                 </div>
                 <button type="submit" className="medieval-btn text-xs !py-2">
                     💾 Save Configuration
@@ -720,16 +720,16 @@ function SocialsPanel({
             </div>
 
             {showForm && (
-                <form onSubmit={handleSubmit} className="scroll-card p-6 mb-6 space-y-4">
+                <form onSubmit={handleSubmit} className="scroll-card glass-card p-6 mb-6 space-y-4">
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                         <input value={form.platform} onChange={e => setForm({ ...form, platform: e.target.value })} placeholder="Platform (e.g. GitHub, LinkedIn)" required
-                            className="px-3 py-2 bg-parchment-light border border-gold/40 rounded text-dark-wood text-sm focus:outline-none focus:border-gold" />
+                            className="px-3 py-2 bg-aged-paper/50 border border-gold/40 rounded text-dark-wood text-sm focus:outline-none focus:border-gold" />
                         <input value={form.url} onChange={e => setForm({ ...form, url: e.target.value })} placeholder="URL (e.g. https://github.com/user)" required
-                            className="px-3 py-2 bg-parchment-light border border-gold/40 rounded text-dark-wood text-sm focus:outline-none focus:border-gold" />
+                            className="px-3 py-2 bg-aged-paper/50 border border-gold/40 rounded text-dark-wood text-sm focus:outline-none focus:border-gold" />
                         <input value={form.icon} onChange={e => setForm({ ...form, icon: e.target.value })} placeholder="Icon emoji (e.g. 🐙)"
-                            className="px-3 py-2 bg-parchment-light border border-gold/40 rounded text-dark-wood text-sm w-24 focus:outline-none focus:border-gold" />
+                            className="px-3 py-2 bg-aged-paper/50 border border-gold/40 rounded text-dark-wood text-sm w-24 focus:outline-none focus:border-gold" />
                         <input type="number" value={form.order} onChange={e => setForm({ ...form, order: parseInt(e.target.value) || 0 })} placeholder="Order"
-                            className="px-3 py-2 bg-parchment-light border border-gold/40 rounded text-dark-wood text-sm w-24 focus:outline-none focus:border-gold" />
+                            className="px-3 py-2 bg-aged-paper/50 border border-gold/40 rounded text-dark-wood text-sm w-24 focus:outline-none focus:border-gold" />
                     </div>
                     <button type="submit" className="medieval-btn text-xs py-2!">
                         {editing ? '✏️ Update' : '🐦 Dispatch Raven'}
@@ -739,12 +739,12 @@ function SocialsPanel({
 
             <div className="space-y-3">
                 {socials.map(social => (
-                    <div key={social.id} className="bg-dark-wood-light border border-gold/20 rounded p-4 flex justify-between items-center">
+                    <div key={social.id} className="bg-aged-paper/50/30 backdrop-blur-sm border border-gold/20 rounded p-4 flex justify-between items-center">
                         <div className="flex items-center gap-3">
                             <span className="text-2xl">{social.icon}</span>
                             <div>
                                 <h3 className="text-gold font-heading text-sm font-bold">{social.platform}</h3>
-                                <p className="text-parchment/40 text-xs truncate max-w-xs">{social.url}</p>
+                                <p className="text-iron-light/60 text-xs truncate max-w-xs">{social.url}</p>
                             </div>
                         </div>
                         <div className="flex gap-2 ml-4">
@@ -753,7 +753,7 @@ function SocialsPanel({
                         </div>
                     </div>
                 ))}
-                {socials.length === 0 && <p className="text-parchment/40 text-sm text-center py-8">No ravens yet. Add social links to appear in the footer and contact section.</p>}
+                {socials.length === 0 && <p className="text-iron-light/60 text-sm text-center py-8">No ravens yet. Add social links to appear in the footer and contact section.</p>}
             </div>
         </div>
     );
