@@ -5,111 +5,134 @@ import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 
 export default function Navbar() {
-    const [scrolled, setScrolled] = useState(false);
-    const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-    const pathname = usePathname();
+  const [scrolled, setScrolled] = useState(false);
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [scrollProgress, setScrollProgress] = useState(0);
+  const pathname = usePathname();
 
-    useEffect(() => {
-        const handleScroll = () => {
-            setScrolled(window.scrollY > 20);
-        };
-        window.addEventListener('scroll', handleScroll);
-        return () => window.removeEventListener('scroll', handleScroll);
-    }, []);
+  useEffect(() => {
+    const handleScroll = () => {
+      setScrolled(window.scrollY > 20);
+      const docHeight = document.documentElement.scrollHeight - window.innerHeight;
+      setScrollProgress(docHeight > 0 ? (window.scrollY / docHeight) * 100 : 0);
+    };
+    window.addEventListener('scroll', handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
 
-    const links = [
-        { name: 'Grand Hall', path: '/' },
-        { name: 'Scrolls of Magic', path: '/projects' },
-        { name: 'Certification', path: '/resume' },
-    ];
+  // Close mobile menu on route change
+  useEffect(() => {
+    setMobileMenuOpen(false);
+  }, [pathname]);
 
-    const isActive = (path: string) => pathname === path;
+  const links = [
+    { name: 'Grand Hall', path: '/' },
+    { name: 'Artifacts', path: '/projects' },
+    { name: 'Decree', path: '/resume' },
+  ];
 
-    return (
-        <header
-            className={`fixed top-0 left-0 right-0 w-full z-50 transition-all duration-700 ease-in-out ${scrolled
-                ? 'bg-parchment/90 backdrop-blur-xl border-b border-gold-light/20 shadow-lg shadow-black/30 py-4'
-                : 'bg-transparent py-8'
-                }`}
-        >
-            <div className="max-w-6xl mx-auto px-6 flex justify-between items-center">
-                {/* Logo/Mark */}
-                <Link href="/" className="flex items-center gap-2 group">
-                    <span className={`text-2xl transition-transform duration-700 ease-out group-hover:rotate-180 ${scrolled ? 'text-gold-light' : 'text-gold-light'}`}>
-                        ✧
-                    </span>
-                    <span className={`font-heading text-xl uppercase tracking-widest font-bold transition-colors ${scrolled ? 'text-dark-wood' : 'text-dark-wood'}`}>
-                        Mage's Mark
-                    </span>
-                </Link>
+  const isActive = (path: string) => pathname === path;
 
-                {/* Desktop Nav */}
-                <nav className="hidden md:flex items-center gap-8">
-                    {links.map((link) => (
-                        <Link
-                            key={link.name}
-                            href={link.path}
-                            className={`font-heading text-sm uppercase tracking-[0.15em] transition-all duration-300 relative group px-2 py-1 ${isActive(link.path)
-                                ? (scrolled ? 'text-crimson' : 'text-crimson')
-                                : (scrolled ? 'text-iron hover:text-dark-wood' : 'text-iron hover:text-dark-wood')
-                                }`}
-                        >
-                            <span className="relative z-10">{link.name}</span>
-                            {/* Active/Hover Underline */}
-                            <span className={`absolute bottom-0 left-0 h-px bg-current transition-all duration-300 ${isActive(link.path) ? 'w-full opacity-100' : 'w-0 opacity-0 group-hover:w-full group-hover:opacity-50'}`} />
-                        </Link>
-                    ))}
-                    <a
-                        href="/#contact"
-                        className={`font-heading text-xs uppercase tracking-[0.15em] font-bold px-5 py-2 rounded-full border transition-all duration-300 ${scrolled
-                            ? 'border-gold-light/50 text-gold-light hover:bg-gold-light hover:text-parchment'
-                            : 'border-gold-light/50 text-gold-light hover:bg-gold-light hover:text-parchment'
-                            }`}
-                    >
-                        Summon Familiar
-                    </a>
-                </nav>
+  return (
+    <header
+      className={`fixed top-0 left-0 right-0 w-full z-50 transition-all duration-500 ${
+        scrolled
+          ? 'bg-parchment/80 backdrop-blur-2xl border-b border-gold-light/10 shadow-lg shadow-black/20 py-3'
+          : 'bg-transparent py-6'
+      }`}
+    >
+      {/* Scroll progress bar */}
+      {scrolled && (
+        <div className="absolute bottom-0 left-0 h-[1px] bg-linear-to-r from-gold via-crimson to-violet transition-all duration-150"
+          style={{ width: `${scrollProgress}%` }}
+        />
+      )}
 
-                {/* Mobile Menu Toggle */}
-                <button
-                    className="md:hidden p-2 text-2xl focus:outline-none"
-                    onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-                    aria-label="Toggle menu"
-                >
-                    <span className={scrolled ? 'text-dark-wood' : 'text-dark-wood'}>
-                        {mobileMenuOpen ? '✕' : '☰'}
-                    </span>
-                </button>
-            </div>
+      <div className="max-w-6xl mx-auto px-6 flex justify-between items-center">
+        {/* Logo */}
+        <Link href="/" className="flex items-center gap-2.5 group">
+          <span className={`text-xl transition-all duration-500 group-hover:rotate-180 group-hover:scale-110 ${scrolled ? 'text-gold' : 'text-gold-light'}`}>
+            &#10023;
+          </span>
+          <span className="font-heading text-lg uppercase tracking-[0.2em] font-bold text-dark-wood">
+            Mage&apos;s Mark
+          </span>
+        </Link>
 
-            {/* Mobile Nav Overlay */}
-            <div
-                className={`md:hidden fixed inset-0 top-[60px] bg-dark-texture backdrop-blur-xl border-t transition-all duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] ${mobileMenuOpen ? 'border-gold-light/20 opacity-100 visible translate-y-0' : 'border-transparent opacity-0 invisible -translate-y-4'
-                    }`}
+        {/* Desktop Nav */}
+        <nav className="hidden md:flex items-center gap-1">
+          {links.map((link) => (
+            <Link
+              key={link.name}
+              href={link.path}
+              className={`font-heading text-[11px] uppercase tracking-[0.15em] transition-all duration-300 relative px-4 py-2 rounded-lg group ${
+                isActive(link.path)
+                  ? 'text-gold-light bg-gold-light/5'
+                  : 'text-iron-light hover:text-dark-wood hover:bg-dark-wood/5'
+              }`}
             >
-                <div className="flex flex-col items-center justify-center h-[calc(100vh-60px)] gap-10">
-                    {links.map((link) => (
-                        <Link
-                            key={link.name}
-                            href={link.path}
-                            onClick={() => setMobileMenuOpen(false)}
-                            className={`font-heading text-2xl uppercase tracking-widest ${isActive(link.path)
-                                ? 'text-gold-light border-b-2 border-gold-light pb-2'
-                                : 'text-parchment-light/70 hover:text-parchment-light'
-                                }`}
-                        >
-                            {link.name}
-                        </Link>
-                    ))}
-                    <a
-                        href="/#contact"
-                        onClick={() => setMobileMenuOpen(false)}
-                        className="mt-8 font-heading text-sm uppercase tracking-widest font-bold px-8 py-3 rounded-full border border-gold-light text-gold-light hover:bg-gold-light hover:text-parchment transition-colors"
-                    >
-                        Summon Familiar
-                    </a>
-                </div>
-            </div>
-        </header>
-    );
+              <span className="relative z-10">{link.name}</span>
+              {isActive(link.path) && (
+                <span className="absolute bottom-1 left-1/2 -translate-x-1/2 w-1 h-1 rounded-full bg-gold-light" />
+              )}
+            </Link>
+          ))}
+          <a
+            href="/#contact"
+            className="ml-4 font-heading text-[11px] uppercase tracking-[0.15em] font-bold px-5 py-2.5 rounded-xl border border-gold-light/30 text-gold-light hover:bg-gold-light hover:text-parchment transition-all duration-300 hover:shadow-lg hover:shadow-gold/10"
+          >
+            Contact
+          </a>
+        </nav>
+
+        {/* Mobile Toggle */}
+        <button
+          className="md:hidden w-10 h-10 flex items-center justify-center rounded-xl hover:bg-dark-wood/5 transition-colors"
+          onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+          aria-label="Toggle menu"
+        >
+          <div className="w-5 h-4 flex flex-col justify-between">
+            <span className={`block h-[1.5px] bg-dark-wood transition-all duration-300 origin-center ${mobileMenuOpen ? 'rotate-45 translate-y-[7px]' : ''}`} />
+            <span className={`block h-[1.5px] bg-dark-wood transition-all duration-300 ${mobileMenuOpen ? 'opacity-0 scale-0' : ''}`} />
+            <span className={`block h-[1.5px] bg-dark-wood transition-all duration-300 origin-center ${mobileMenuOpen ? '-rotate-45 -translate-y-[7px]' : ''}`} />
+          </div>
+        </button>
+      </div>
+
+      {/* Mobile Nav */}
+      <div
+        className={`md:hidden fixed inset-0 top-[52px] bg-parchment/95 backdrop-blur-2xl transition-all duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] ${
+          mobileMenuOpen ? 'opacity-100 visible translate-y-0' : 'opacity-0 invisible -translate-y-4'
+        }`}
+      >
+        <div className="flex flex-col items-center justify-center h-[calc(100vh-52px)] gap-8">
+          {links.map((link, i) => (
+            <Link
+              key={link.name}
+              href={link.path}
+              onClick={() => setMobileMenuOpen(false)}
+              className={`font-heading text-2xl uppercase tracking-[0.2em] transition-all duration-300 ${
+                isActive(link.path)
+                  ? 'text-gold-light'
+                  : 'text-iron-light hover:text-dark-wood'
+              }`}
+              style={{ animationDelay: `${i * 100}ms` }}
+            >
+              {link.name}
+              {isActive(link.path) && (
+                <div className="h-px w-full bg-linear-to-r from-transparent via-gold-light to-transparent mt-2" />
+              )}
+            </Link>
+          ))}
+          <a
+            href="/#contact"
+            onClick={() => setMobileMenuOpen(false)}
+            className="mt-4 font-heading text-sm uppercase tracking-widest font-bold px-8 py-3 rounded-xl border border-gold-light/30 text-gold-light hover:bg-gold-light hover:text-parchment transition-colors"
+          >
+            Contact
+          </a>
+        </div>
+      </div>
+    </header>
+  );
 }
