@@ -5,14 +5,13 @@ WORKDIR /app
 COPY package.json bun.lock* ./
 RUN bun install --frozen-lockfile || bun install
 
-# Stage 2: Generate Prisma client and build
+# Stage 2: Generate Prisma client
 FROM oven/bun:latest AS builder
 WORKDIR /app
 COPY --from=deps /app/node_modules ./node_modules
 COPY . .
 
 RUN bunx prisma generate
-RUN bunx prisma db push
 
 # Stage 3: Production runner
 FROM oven/bun:latest AS runner
@@ -20,16 +19,18 @@ WORKDIR /app
 
 ENV NODE_ENV=production
 ENV PORT=12001
+ENV DATABASE_URL=file:./dev.db
 
 COPY --from=builder /app/node_modules ./node_modules
 COPY --from=builder /app/prisma ./prisma
 COPY --from=builder /app/src ./src
 COPY --from=builder /app/package.json ./
-COPY --from=builder /app/.env ./.env
 
-# Create uploads directory
+# Install curl for healthcheck and create uploads directory
+RUN apt-get update && apt-get install -y --no-install-recommends curl && rm -rf /var/lib/apt/lists/*
 RUN mkdir -p uploads/resumes
 
 EXPOSE 12001
 
-CMD ["bun", "src/index.ts"]
+# Push DB schema at startup then run the server
+CMD ["sh", "-c", "bunx prisma db push --skip-generate && bun src/index.ts"]
