@@ -40,11 +40,17 @@ export interface ResumeInfo {
     url: string;
 }
 
+export interface SectionLayout {
+    id: string;
+    visible: boolean;
+}
+
 export interface SiteConfig {
     id: number;
     heroTitle: string;
     heroSubtitle: string;
     aboutText: string;
+    sectionLayout: string;
 }
 
 // ─── Auth ────────────────────────────────────────────────────────

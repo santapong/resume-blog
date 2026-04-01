@@ -74,7 +74,7 @@ function CircularProgress({ value, max, color }: { value: number; max: number; c
       <circle
         cx="48" cy="48" r={radius}
         fill="none"
-        stroke="rgba(200,214,229,0.08)"
+        stroke="rgba(139,92,246,0.08)"
         strokeWidth="4"
       />
       <circle
@@ -93,24 +93,23 @@ function CircularProgress({ value, max, color }: { value: number; max: number; c
 }
 
 const defaultStats: Stat[] = [
-  { value: 3, label: 'Years of Service', suffix: '+', icon: '⏳', color: '#e8b84b' },
-  { value: 10, label: 'Quests Completed', suffix: '+', icon: '⚔️', color: '#6cb4ee' },
-  { value: 15, label: 'Weapons Mastered', suffix: '+', icon: '🛡️', color: '#a78bfa' },
-  { value: 99, label: 'Dedication', suffix: '%', icon: '🔥', color: '#4ade80' },
+  { value: 3, label: 'Years in Orbit', suffix: '+', icon: '🪐', color: '#8b5cf6' },
+  { value: 10, label: 'Missions Complete', suffix: '+', icon: '🚀', color: '#4d8bff' },
+  { value: 15, label: 'Tech Mastered', suffix: '+', icon: '⚡', color: '#22d3ee' },
+  { value: 99, label: 'Dedication', suffix: '%', icon: '🔥', color: '#34d399' },
 ];
 
 export default function StatsCounter({ stats = defaultStats }: { stats?: Stat[] }) {
   return (
     <section className="py-20 bg-dark-texture relative overflow-hidden">
-      <div className="absolute top-0 left-0 w-full h-px bg-linear-to-r from-transparent via-gold/30 to-transparent" />
-      <div className="absolute bottom-0 left-0 w-full h-px bg-linear-to-r from-transparent via-gold/30 to-transparent" />
+      <div className="absolute top-0 left-0 w-full h-px bg-linear-to-r from-transparent via-nebula-purple/30 to-transparent" />
+      <div className="absolute bottom-0 left-0 w-full h-px bg-linear-to-r from-transparent via-nebula-blue/30 to-transparent" />
 
       <div className="max-w-5xl mx-auto px-6">
         <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
           {stats.map((stat, i) => (
             <ScrollReveal key={stat.label} delay={i * 120} variant="scale">
               <div className="text-center group relative">
-                {/* Circular progress ring */}
                 <div className="relative w-24 h-24 mx-auto mb-4">
                   <CircularProgress value={stat.value} max={stat.suffix === '%' ? 100 : stat.value * 1.5} color={stat.color} />
                   <div className="absolute inset-0 flex items-center justify-center">
@@ -120,11 +119,11 @@ export default function StatsCounter({ stats = defaultStats }: { stats?: Stat[] 
                   </div>
                 </div>
 
-                <div className="font-heading text-3xl md:text-4xl font-bold text-dark-wood mb-1">
+                <div className="font-heading text-3xl md:text-4xl font-bold text-starlight mb-1">
                   <CountUp target={stat.value} />
-                  {stat.suffix && <span className="text-gold-light">{stat.suffix}</span>}
+                  {stat.suffix && <span className="text-nebula-purple-light">{stat.suffix}</span>}
                 </div>
-                <div className="font-heading text-iron-light/60 text-[10px] tracking-[0.15em] uppercase">
+                <div className="font-heading text-stardust-light/60 text-[10px] tracking-[0.15em] uppercase">
                   {stat.label}
                 </div>
               </div>

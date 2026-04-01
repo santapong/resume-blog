@@ -8,10 +8,10 @@ import {
   getProjects, createProject, updateProject, deleteProject,
   uploadResume, getResume, getConfig, updateConfig,
   getSocials, createSocial, updateSocial, deleteSocial,
-  type Experience, type Skill, type Project, type ResumeInfo, type SiteConfig, type SocialLink,
+  type Experience, type Skill, type Project, type ResumeInfo, type SiteConfig, type SocialLink, type SectionLayout,
 } from '@/app/lib/api';
 
-type Tab = 'overview' | 'experiences' | 'skills' | 'projects' | 'resume' | 'config' | 'socials';
+type Tab = 'overview' | 'experiences' | 'skills' | 'projects' | 'resume' | 'config' | 'socials' | 'layout';
 
 export default function AdminDashboard() {
   const router = useRouter();
@@ -64,7 +64,8 @@ export default function AdminDashboard() {
     { key: 'skills', label: 'Arsenal', icon: '🛡️', count: skills.length },
     { key: 'projects', label: 'Conquests', icon: '⚔️', count: projects.length },
     { key: 'resume', label: 'Decree', icon: '📄' },
-    { key: 'socials', label: 'Ravens', icon: '🐦', count: socials.length },
+    { key: 'socials', label: 'Links', icon: '🔗', count: socials.length },
+    { key: 'layout', label: 'Layout', icon: '🎨' },
     { key: 'config', label: 'Config', icon: '⚙️' },
   ];
 
@@ -81,8 +82,8 @@ export default function AdminDashboard() {
               <path d="M3 12h18M3 6h18M3 18h18" />
             </svg>
           </button>
-          <h1 className="font-heading text-gold text-base tracking-wider">
-            Admin Chamber
+          <h1 className="font-heading text-nebula-purple-light text-base tracking-wider">
+            Mission Control
           </h1>
         </div>
         <div className="flex items-center gap-4">
@@ -161,6 +162,9 @@ export default function AdminDashboard() {
           {activeTab === 'socials' && (
             <SocialsPanel socials={socials} onRefresh={loadData} onMessage={showMessage} />
           )}
+          {activeTab === 'layout' && (
+            <LayoutPanel config={config} onRefresh={loadData} onMessage={showMessage} />
+          )}
           {activeTab === 'config' && (
             <ConfigPanel config={config} onRefresh={loadData} onMessage={showMessage} />
           )}
@@ -195,7 +199,7 @@ function OverviewPanel({
     <div>
       <div className="mb-8">
         <h2 className="font-heading text-2xl text-dark-wood tracking-wider mb-1">Dashboard</h2>
-        <p className="text-iron-light text-sm">Welcome back, Archmage. Here&apos;s your portfolio overview.</p>
+        <p className="text-iron-light text-sm">Welcome back, Commander. Here&apos;s your portfolio overview.</p>
       </div>
 
       {/* Stats Grid */}
@@ -582,6 +586,237 @@ function ResumePanel({ resume, onRefresh, onMessage }: { resume: ResumeInfo | nu
           </label>
           <p className="text-iron-light/30 text-[10px] mt-3">PDF only, max 10MB</p>
         </div>
+      </div>
+    </div>
+  );
+}
+
+// ─── Layout Panel (Drag & Drop) ───────────────────────────────
+const DEFAULT_SECTIONS: SectionLayout[] = [
+  { id: 'hero', visible: true },
+  { id: 'about', visible: true },
+  { id: 'skills', visible: true },
+  { id: 'stats', visible: true },
+  { id: 'experience', visible: true },
+  { id: 'contact', visible: true },
+];
+
+const SECTION_META: Record<string, { label: string; icon: string; desc: string }> = {
+  hero: { label: 'Hero Section', icon: '🚀', desc: 'Main hero banner with title, roles, and CTA buttons' },
+  about: { label: 'About Me', icon: '🧑‍🚀', desc: 'Biography and highlight cards' },
+  skills: { label: 'Tech Arsenal', icon: '⚡', desc: 'Skills grid organized by category' },
+  stats: { label: 'Stats Counter', icon: '📊', desc: 'Animated statistics counters' },
+  experience: { label: 'Mission Log', icon: '📜', desc: 'Work experience timeline' },
+  contact: { label: 'Contact', icon: '📡', desc: 'Contact form and social links' },
+};
+
+function LayoutPanel({ config, onRefresh, onMessage }: { config: SiteConfig | null; onRefresh: () => void; onMessage: (msg: string, type?: 'success' | 'error') => void }) {
+  const [sections, setSections] = useState<SectionLayout[]>(DEFAULT_SECTIONS);
+  const [draggedIndex, setDraggedIndex] = useState<number | null>(null);
+  const [dragOverIndex, setDragOverIndex] = useState<number | null>(null);
+  const [saving, setSaving] = useState(false);
+
+  useEffect(() => {
+    if (config?.sectionLayout) {
+      try {
+        const parsed = JSON.parse(config.sectionLayout);
+        if (Array.isArray(parsed) && parsed.length > 0) {
+          setSections(parsed);
+        }
+      } catch {
+        // use default
+      }
+    }
+  }, [config]);
+
+  const handleDragStart = (index: number) => {
+    setDraggedIndex(index);
+  };
+
+  const handleDragOver = (e: React.DragEvent, index: number) => {
+    e.preventDefault();
+    setDragOverIndex(index);
+  };
+
+  const handleDrop = (e: React.DragEvent, dropIndex: number) => {
+    e.preventDefault();
+    if (draggedIndex === null || draggedIndex === dropIndex) {
+      setDraggedIndex(null);
+      setDragOverIndex(null);
+      return;
+    }
+    const newSections = [...sections];
+    const [dragged] = newSections.splice(draggedIndex, 1);
+    newSections.splice(dropIndex, 0, dragged);
+    setSections(newSections);
+    setDraggedIndex(null);
+    setDragOverIndex(null);
+  };
+
+  const handleDragEnd = () => {
+    setDraggedIndex(null);
+    setDragOverIndex(null);
+  };
+
+  const toggleVisibility = (index: number) => {
+    const newSections = [...sections];
+    newSections[index] = { ...newSections[index], visible: !newSections[index].visible };
+    setSections(newSections);
+  };
+
+  const moveUp = (index: number) => {
+    if (index === 0) return;
+    const newSections = [...sections];
+    [newSections[index - 1], newSections[index]] = [newSections[index], newSections[index - 1]];
+    setSections(newSections);
+  };
+
+  const moveDown = (index: number) => {
+    if (index === sections.length - 1) return;
+    const newSections = [...sections];
+    [newSections[index], newSections[index + 1]] = [newSections[index + 1], newSections[index]];
+    setSections(newSections);
+  };
+
+  const handleSave = async () => {
+    setSaving(true);
+    try {
+      await updateConfig({ sectionLayout: JSON.stringify(sections) });
+      onMessage('Layout saved! Changes will appear on the landing page.');
+      onRefresh();
+    } catch {
+      onMessage('Failed to save layout.', 'error');
+    } finally {
+      setSaving(false);
+    }
+  };
+
+  const handleReset = () => {
+    setSections(DEFAULT_SECTIONS);
+  };
+
+  return (
+    <div>
+      <div className="flex justify-between items-center mb-6">
+        <div>
+          <h2 className="font-heading text-xl text-dark-wood tracking-wider flex items-center gap-2">
+            <span>🎨</span> Landing Page Layout
+          </h2>
+          <p className="text-iron-light text-xs mt-1">Drag and drop sections to reorder. Toggle visibility to show/hide sections.</p>
+        </div>
+        <div className="flex gap-2">
+          <button onClick={handleReset} className="medieval-btn-outline text-[11px] !py-2 !px-4">
+            Reset
+          </button>
+          <button onClick={handleSave} disabled={saving} className="medieval-btn text-[11px] !py-2 !px-4">
+            {saving ? 'Saving...' : 'Save Layout'}
+          </button>
+        </div>
+      </div>
+
+      <div className="space-y-2">
+        {sections.map((section, index) => {
+          const meta = SECTION_META[section.id] || { label: section.id, icon: '?', desc: '' };
+          const isDragging = draggedIndex === index;
+          const isDragOver = dragOverIndex === index;
+
+          return (
+            <div
+              key={section.id}
+              draggable
+              onDragStart={() => handleDragStart(index)}
+              onDragOver={(e) => handleDragOver(e, index)}
+              onDrop={(e) => handleDrop(e, index)}
+              onDragEnd={handleDragEnd}
+              className={`glass-card p-4 flex items-center gap-4 transition-all duration-200 cursor-grab active:cursor-grabbing ${
+                isDragging ? 'opacity-50 scale-[0.98]' : ''
+              } ${isDragOver ? 'border-violet/30! shadow-[0_0_20px_rgba(139,92,246,0.2)]' : ''} ${
+                !section.visible ? 'opacity-60' : ''
+              }`}
+            >
+              {/* Drag Handle */}
+              <div className="flex flex-col gap-0.5 text-iron-light/30 cursor-grab">
+                <div className="flex gap-0.5">
+                  <span className="w-1.5 h-1.5 rounded-full bg-current" />
+                  <span className="w-1.5 h-1.5 rounded-full bg-current" />
+                </div>
+                <div className="flex gap-0.5">
+                  <span className="w-1.5 h-1.5 rounded-full bg-current" />
+                  <span className="w-1.5 h-1.5 rounded-full bg-current" />
+                </div>
+                <div className="flex gap-0.5">
+                  <span className="w-1.5 h-1.5 rounded-full bg-current" />
+                  <span className="w-1.5 h-1.5 rounded-full bg-current" />
+                </div>
+              </div>
+
+              {/* Order number */}
+              <span className="font-heading text-xs text-iron-light/30 w-6 text-center">{index + 1}</span>
+
+              {/* Icon */}
+              <div className="w-10 h-10 rounded-xl bg-linear-to-br from-violet/10 to-nebula-blue/10 flex items-center justify-center border border-violet/10 shrink-0">
+                <span className="text-xl">{meta.icon}</span>
+              </div>
+
+              {/* Info */}
+              <div className="flex-1 min-w-0">
+                <h3 className="text-dark-wood font-heading text-sm font-bold tracking-wide">{meta.label}</h3>
+                <p className="text-iron-light/50 text-xs mt-0.5">{meta.desc}</p>
+              </div>
+
+              {/* Actions */}
+              <div className="flex items-center gap-1.5">
+                <button
+                  onClick={() => moveUp(index)}
+                  disabled={index === 0}
+                  className="w-7 h-7 rounded-lg hover:bg-iron-light/5 flex items-center justify-center text-iron-light/40 hover:text-dark-wood transition-colors disabled:opacity-20 disabled:cursor-not-allowed"
+                  title="Move up"
+                >
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                    <path d="M18 15l-6-6-6 6" />
+                  </svg>
+                </button>
+                <button
+                  onClick={() => moveDown(index)}
+                  disabled={index === sections.length - 1}
+                  className="w-7 h-7 rounded-lg hover:bg-iron-light/5 flex items-center justify-center text-iron-light/40 hover:text-dark-wood transition-colors disabled:opacity-20 disabled:cursor-not-allowed"
+                  title="Move down"
+                >
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                    <path d="M6 9l6 6 6-6" />
+                  </svg>
+                </button>
+                <button
+                  onClick={() => toggleVisibility(index)}
+                  className={`w-7 h-7 rounded-lg flex items-center justify-center transition-colors ${
+                    section.visible
+                      ? 'hover:bg-forest/10 text-forest/60 hover:text-forest'
+                      : 'hover:bg-rose/10 text-rose/60 hover:text-rose'
+                  }`}
+                  title={section.visible ? 'Hide section' : 'Show section'}
+                >
+                  {section.visible ? (
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                      <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z" />
+                      <circle cx="12" cy="12" r="3" />
+                    </svg>
+                  ) : (
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                      <path d="M17.94 17.94A10.07 10.07 0 0112 20c-7 0-11-8-11-8a18.45 18.45 0 015.06-5.94M9.9 4.24A9.12 9.12 0 0112 4c7 0 11 8 11 8a18.5 18.5 0 01-2.16 3.19m-6.72-1.07a3 3 0 11-4.24-4.24" />
+                      <line x1="1" y1="1" x2="23" y2="23" />
+                    </svg>
+                  )}
+                </button>
+              </div>
+            </div>
+          );
+        })}
+      </div>
+
+      <div className="mt-6 glass-card p-4">
+        <p className="text-iron-light/40 text-xs font-heading tracking-wider">
+          <span className="text-cosmic-gold">TIP:</span> Drag sections to reorder them on the landing page. Use the eye icon to toggle visibility. Click &quot;Save Layout&quot; to apply changes.
+        </p>
       </div>
     </div>
   );
