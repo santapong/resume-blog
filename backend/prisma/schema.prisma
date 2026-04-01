@@ -46,10 +46,11 @@ model Resume {
 }
 
 model SiteConfig {
-  id           Int    @id @default(1)
-  heroTitle    String @default("Software & Automation Engineer")
-  heroSubtitle String @default("")
-  aboutText    String @default("")
+  id            Int    @id @default(1)
+  heroTitle     String @default("Software & Automation Engineer")
+  heroSubtitle  String @default("")
+  aboutText     String @default("")
+  sectionLayout String @default("[{\"id\":\"hero\",\"visible\":true},{\"id\":\"about\",\"visible\":true},{\"id\":\"skills\",\"visible\":true},{\"id\":\"stats\",\"visible\":true},{\"id\":\"experience\",\"visible\":true},{\"id\":\"contact\",\"visible\":true}]")
 }
 
 model SocialLink {

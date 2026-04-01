@@ -27,11 +27,12 @@ router.get('/', async (_req: Request, res: Response): Promise<void> => {
 // PUT /api/config — Update site configuration (auth required)
 router.put('/', authenticateToken, async (req: Request, res: Response): Promise<void> => {
     try {
-        const { heroTitle, heroSubtitle, aboutText } = req.body;
+        const { heroTitle, heroSubtitle, aboutText, sectionLayout } = req.body;
         const data: Record<string, unknown> = {};
         if (heroTitle !== undefined) data.heroTitle = heroTitle;
         if (heroSubtitle !== undefined) data.heroSubtitle = heroSubtitle;
         if (aboutText !== undefined) data.aboutText = aboutText;
+        if (sectionLayout !== undefined) data.sectionLayout = typeof sectionLayout === 'string' ? sectionLayout : JSON.stringify(sectionLayout);
 
         const config = await prisma.siteConfig.upsert({
             where: { id: 1 },

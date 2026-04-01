@@ -5,20 +5,19 @@ import { useMemo } from 'react';
 export default function FloatingParticles({ count = 20 }: { count?: number }) {
   const particles = useMemo(() => {
     return Array.from({ length: count }, (_, i) => {
-      const isStar = Math.random() > 0.5;
+      const type = Math.random();
       return {
         id: i,
         left: `${Math.random() * 100}%`,
-        size: isStar ? 3 + Math.random() * 4 : 2 + Math.random() * 3,
-        duration: 12 + Math.random() * 18,
-        delay: Math.random() * 12,
-        opacity: 0.3 + Math.random() * 0.5,
-        color: Math.random() > 0.6
-          ? 'rgba(167, 139, 250, 0.6)'
-          : Math.random() > 0.3
-            ? 'rgba(108, 180, 238, 0.6)'
-            : 'rgba(232, 184, 75, 0.5)',
-        isStar,
+        size: type > 0.7 ? 2 + Math.random() * 2 : 1 + Math.random() * 1.5,
+        duration: 15 + Math.random() * 25,
+        delay: Math.random() * 15,
+        opacity: 0.2 + Math.random() * 0.6,
+        color: type > 0.7
+          ? 'rgba(139, 92, 246, 0.6)'
+          : type > 0.4
+            ? 'rgba(77, 139, 255, 0.5)'
+            : 'rgba(255, 255, 255, 0.4)',
       };
     });
   }, [count]);
@@ -38,10 +37,8 @@ export default function FloatingParticles({ count = 20 }: { count?: number }) {
             animationDelay: `${p.delay}s`,
             opacity: p.opacity,
             background: p.color,
-            boxShadow: `0 0 ${p.size * 2}px ${p.color}`,
-            clipPath: p.isStar
-              ? 'polygon(50% 0%, 61% 35%, 98% 35%, 68% 57%, 79% 91%, 50% 70%, 21% 91%, 32% 57%, 2% 35%, 39% 35%)'
-              : 'circle(50%)',
+            boxShadow: `0 0 ${p.size * 3}px ${p.color}`,
+            borderRadius: '50%',
           }}
         />
       ))}

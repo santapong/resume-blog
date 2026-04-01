@@ -18,7 +18,6 @@ export default function ProjectsPage() {
       .finally(() => setLoading(false));
   }, []);
 
-  // Get all unique technologies
   const allTechs = useMemo(() => {
     const techs = new Set<string>();
     projects.forEach(p => p.technologies.forEach(t => techs.add(t)));
@@ -32,32 +31,29 @@ export default function ProjectsPage() {
   });
 
   return (
-    <main className="min-h-screen bg-parchment-texture text-dark-wood">
+    <main className="min-h-screen bg-parchment-texture text-starlight">
       <section className="pt-32 pb-24 px-6 relative overflow-hidden">
-        {/* Background */}
-        <div className="absolute top-20 left-1/2 -translate-x-1/2 w-[600px] h-[400px] bg-crimson-light/5 blur-[120px] pointer-events-none" />
-        <div className="absolute bottom-20 right-0 w-[300px] h-[300px] bg-violet/5 blur-[100px] pointer-events-none" />
+        <div className="absolute top-20 left-1/2 -translate-x-1/2 w-[600px] h-[400px] bg-nebula-purple/5 blur-[120px] pointer-events-none" />
+        <div className="absolute bottom-20 right-0 w-[300px] h-[300px] bg-nebula-blue/5 blur-[100px] pointer-events-none" />
 
         <div className="max-w-6xl mx-auto relative z-10">
           <ScrollReveal>
-            <h1 className="section-heading mb-4">Artifacts & Enchantments</h1>
-            <p className="text-center text-iron max-w-2xl mx-auto mb-10 text-sm leading-relaxed">
-              A collection of mystical creations, each representing a quest undertaken
-              and deep knowledge gained.
+            <h1 className="section-heading mb-4">Projects & Creations</h1>
+            <p className="text-center text-stardust max-w-2xl mx-auto mb-10 text-sm leading-relaxed">
+              A collection of digital creations, each representing a mission undertaken
+              and deep knowledge gained across the cosmos.
             </p>
           </ScrollReveal>
 
-          {/* Filters */}
           <ScrollReveal delay={100}>
             <div className="flex flex-col items-center gap-5 mb-14">
-              {/* Main filter */}
               <div className="flex gap-2">
                 <button
                   onClick={() => setFilter('all')}
                   className={`px-5 py-2 rounded-xl font-heading text-xs tracking-wider transition-all ${
                     filter === 'all'
-                      ? 'bg-dark-wood text-parchment shadow-lg'
-                      : 'bg-parchment-light/40 border border-iron-light/10 text-iron-light hover:text-dark-wood hover:border-iron-light/30'
+                      ? 'bg-starlight text-void shadow-lg'
+                      : 'bg-void-light/40 border border-nebula-purple/10 text-stardust-light hover:text-starlight hover:border-nebula-purple/30'
                   }`}
                 >
                   All ({projects.length})
@@ -66,15 +62,14 @@ export default function ProjectsPage() {
                   onClick={() => setFilter('featured')}
                   className={`px-5 py-2 rounded-xl font-heading text-xs tracking-wider transition-all flex items-center gap-1.5 ${
                     filter === 'featured'
-                      ? 'bg-linear-to-r from-gold to-gold-dark text-parchment shadow-lg shadow-gold/20'
-                      : 'bg-parchment-light/40 border border-iron-light/10 text-iron-light hover:text-dark-wood hover:border-gold-light/30'
+                      ? 'bg-linear-to-r from-nebula-purple to-nebula-blue text-white shadow-lg shadow-nebula-purple/20'
+                      : 'bg-void-light/40 border border-nebula-purple/10 text-stardust-light hover:text-starlight hover:border-nebula-purple/30'
                   }`}
                 >
-                  Legendary
+                  Featured
                 </button>
               </div>
 
-              {/* Tech filter chips */}
               <div className="flex flex-wrap justify-center gap-2 max-w-3xl">
                 {allTechs.map(tech => (
                   <button
@@ -82,8 +77,8 @@ export default function ProjectsPage() {
                     onClick={() => setTechFilter(techFilter === tech ? null : tech)}
                     className={`px-3 py-1 rounded-lg text-[10px] font-heading tracking-wider uppercase transition-all ${
                       techFilter === tech
-                        ? 'bg-crimson-light/15 text-crimson-light border border-crimson-light/30'
-                        : 'text-iron-light/50 border border-transparent hover:text-iron-light hover:border-iron-light/10'
+                        ? 'bg-nebula-purple/15 text-nebula-purple-light border border-nebula-purple/30'
+                        : 'text-stardust-light/50 border border-transparent hover:text-stardust-light hover:border-nebula-purple/10'
                     }`}
                   >
                     {tech}
@@ -116,10 +111,10 @@ export default function ProjectsPage() {
             </div>
           ) : filteredProjects.length === 0 ? (
             <div className="text-center py-28 glass-card max-w-md mx-auto">
-              <div className="text-5xl mb-5 opacity-60">📖</div>
-              <h3 className="font-heading text-xl text-dark-wood mb-2">No Scrolls Found</h3>
-              <p className="text-iron text-sm max-w-sm mx-auto">
-                No artifacts match the current filters. Try adjusting your search.
+              <div className="text-5xl mb-5 opacity-60">🔭</div>
+              <h3 className="font-heading text-xl text-starlight mb-2">No Projects Found</h3>
+              <p className="text-stardust text-sm max-w-sm mx-auto">
+                No projects match the current filters. Try adjusting your search.
               </p>
             </div>
           ) : (
@@ -130,8 +125,7 @@ export default function ProjectsPage() {
                     className="scroll-card group h-full flex flex-col cursor-pointer"
                     onClick={() => setSelectedProject(project)}
                   >
-                    {/* Image */}
-                    <div className="relative h-52 overflow-hidden bg-aged-paper border-b border-gold-light/10 rounded-t-2xl">
+                    <div className="relative h-52 overflow-hidden bg-deep-space border-b border-nebula-purple/10 rounded-t-2xl">
                       {project.imageUrl ? (
                         <>
                           <img
@@ -139,21 +133,20 @@ export default function ProjectsPage() {
                             alt={project.title}
                             className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
                           />
-                          <div className="absolute inset-0 bg-linear-to-t from-parchment/80 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+                          <div className="absolute inset-0 bg-linear-to-t from-void/80 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
                         </>
                       ) : (
                         <div className="w-full h-full flex items-center justify-center bg-dark-texture">
-                          <span className="text-5xl opacity-20">📜</span>
+                          <span className="text-5xl opacity-20">🚀</span>
                         </div>
                       )}
 
                       {project.featured && (
-                        <div className="absolute top-3 right-3 bg-linear-to-r from-gold to-gold-dark text-parchment px-3 py-1 text-[10px] font-bold rounded-lg shadow-lg border border-gold-light/30 font-heading tracking-wider uppercase">
-                          Legendary
+                        <div className="absolute top-3 right-3 bg-linear-to-r from-nebula-purple to-nebula-blue text-white px-3 py-1 text-[10px] font-bold rounded-lg shadow-lg border border-nebula-purple-light/30 font-heading tracking-wider uppercase">
+                          Featured
                         </div>
                       )}
 
-                      {/* Quick action overlay */}
                       <div className="absolute inset-0 flex items-center justify-center gap-3 opacity-0 group-hover:opacity-100 transition-all duration-300">
                         {project.liveUrl && (
                           <a
@@ -161,7 +154,7 @@ export default function ProjectsPage() {
                             target="_blank"
                             rel="noopener noreferrer"
                             onClick={e => e.stopPropagation()}
-                            className="w-10 h-10 rounded-xl bg-dark-wood/90 flex items-center justify-center text-parchment hover:bg-dark-wood transition-colors"
+                            className="w-10 h-10 rounded-xl bg-starlight/90 flex items-center justify-center text-void hover:bg-starlight transition-colors"
                             title="View Live"
                           >
                             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
@@ -175,7 +168,7 @@ export default function ProjectsPage() {
                             target="_blank"
                             rel="noopener noreferrer"
                             onClick={e => e.stopPropagation()}
-                            className="w-10 h-10 rounded-xl bg-dark-wood/90 flex items-center justify-center text-parchment hover:bg-dark-wood transition-colors"
+                            className="w-10 h-10 rounded-xl bg-starlight/90 flex items-center justify-center text-void hover:bg-starlight transition-colors"
                             title="View Code"
                           >
                             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
@@ -186,12 +179,11 @@ export default function ProjectsPage() {
                       </div>
                     </div>
 
-                    {/* Content */}
                     <div className="p-6 flex flex-col flex-grow">
-                      <h3 className="font-heading text-lg text-dark-wood font-bold mb-2 group-hover:text-crimson-light transition-colors">
+                      <h3 className="font-heading text-lg text-starlight font-bold mb-2 group-hover:text-nebula-purple-light transition-colors">
                         {project.title}
                       </h3>
-                      <p className="text-iron text-sm mb-5 flex-grow leading-relaxed line-clamp-3">
+                      <p className="text-stardust text-sm mb-5 flex-grow leading-relaxed line-clamp-3">
                         {project.description}
                       </p>
 
@@ -202,7 +194,7 @@ export default function ProjectsPage() {
                           </span>
                         ))}
                         {project.technologies.length > 4 && (
-                          <span className="iron-tag text-[10px] border-none text-gold-light/60">
+                          <span className="iron-tag text-[10px] border-none text-nebula-purple-light/60">
                             +{project.technologies.length - 4}
                           </span>
                         )}
@@ -226,7 +218,6 @@ export default function ProjectsPage() {
             className="modal-content w-full max-w-2xl mx-4"
             onClick={e => e.stopPropagation()}
           >
-            {/* Modal Header Image */}
             {selectedProject.imageUrl && (
               <div className="h-56 overflow-hidden rounded-t-[20px]">
                 <img
@@ -240,27 +231,27 @@ export default function ProjectsPage() {
             <div className="p-8">
               <div className="flex items-start justify-between gap-4 mb-4">
                 <div>
-                  <h2 className="font-heading text-2xl text-dark-wood font-bold">
+                  <h2 className="font-heading text-2xl text-starlight font-bold">
                     {selectedProject.title}
                   </h2>
                   {selectedProject.featured && (
-                    <span className="inline-block mt-2 wax-tag text-[10px]">Legendary Artifact</span>
+                    <span className="inline-block mt-2 wax-tag text-[10px]">Featured Project</span>
                   )}
                 </div>
                 <button
                   onClick={() => setSelectedProject(null)}
-                  className="w-8 h-8 rounded-lg border border-iron-light/10 flex items-center justify-center text-iron-light hover:text-dark-wood hover:border-gold-light/30 transition-colors"
+                  className="w-8 h-8 rounded-lg border border-nebula-purple/10 flex items-center justify-center text-stardust-light hover:text-starlight hover:border-nebula-purple/30 transition-colors"
                 >
                   &#10005;
                 </button>
               </div>
 
-              <p className="text-iron leading-relaxed mb-6">
+              <p className="text-stardust leading-relaxed mb-6">
                 {selectedProject.description}
               </p>
 
               <div className="mb-6">
-                <h4 className="font-heading text-xs text-iron-light uppercase tracking-wider mb-3">Technologies Used</h4>
+                <h4 className="font-heading text-xs text-stardust-light uppercase tracking-wider mb-3">Technologies Used</h4>
                 <div className="flex flex-wrap gap-2">
                   {selectedProject.technologies.map((tech: string) => (
                     <span key={tech} className="iron-tag text-xs">{tech}</span>
@@ -268,7 +259,7 @@ export default function ProjectsPage() {
                 </div>
               </div>
 
-              <div className="flex gap-3 pt-4 border-t border-iron-light/10">
+              <div className="flex gap-3 pt-4 border-t border-nebula-purple/10">
                 {selectedProject.liveUrl && (
                   <a
                     href={selectedProject.liveUrl}

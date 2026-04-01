@@ -25,30 +25,30 @@ export default function AdminLoginPage() {
       localStorage.setItem('admin_token', token);
       router.push('/admin/dashboard');
     } catch {
-      setError('Invalid credentials. The castle gates remain sealed.');
+      setError('Invalid credentials. Access denied.');
     } finally {
       setLoading(false);
     }
   };
 
   return (
-    <main className="min-h-screen bg-parchment flex items-center justify-center px-6 relative overflow-hidden">
+    <main className="min-h-screen bg-void flex items-center justify-center px-6 relative overflow-hidden">
       {/* Background orbs */}
-      <div className="absolute top-20 left-20 w-[400px] h-[400px] bg-crimson-light/5 rounded-full blur-[120px] pointer-events-none" />
-      <div className="absolute bottom-20 right-20 w-[300px] h-[300px] bg-violet/5 rounded-full blur-[100px] pointer-events-none" />
-      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[500px] h-[500px] bg-gold/3 rounded-full blur-[100px] pointer-events-none" />
+      <div className="absolute top-20 left-20 w-[400px] h-[400px] bg-nebula-purple/5 rounded-full blur-[120px] pointer-events-none" />
+      <div className="absolute bottom-20 right-20 w-[300px] h-[300px] bg-nebula-blue/5 rounded-full blur-[100px] pointer-events-none" />
+      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[500px] h-[500px] bg-nebula-pink/3 rounded-full blur-[100px] pointer-events-none" />
 
       <div className="w-full max-w-md animate-fade-in-up">
         {/* Header */}
         <div className="text-center mb-10">
-          <div className="w-16 h-16 mx-auto mb-5 rounded-2xl bg-linear-to-br from-gold/15 to-gold-dark/15 flex items-center justify-center border border-gold-light/10">
-            <span className="text-3xl">🏰</span>
+          <div className="w-16 h-16 mx-auto mb-5 rounded-2xl bg-linear-to-br from-nebula-purple/15 to-nebula-blue/15 flex items-center justify-center border border-nebula-purple/10">
+            <span className="text-3xl">🛸</span>
           </div>
-          <h1 className="font-heading text-3xl font-bold text-dark-wood mb-2">
-            The Gatehouse
+          <h1 className="font-heading text-3xl font-bold text-starlight mb-2">
+            Mission Control
           </h1>
-          <p className="text-iron-light text-sm">
-            Speak the words of passage to enter
+          <p className="text-stardust-light text-sm">
+            Authenticate to access the command center
           </p>
         </div>
 
@@ -64,7 +64,7 @@ export default function AdminLoginPage() {
           )}
 
           <div>
-            <label className="block text-iron-light text-xs font-heading tracking-wider uppercase mb-2">
+            <label className="block text-stardust-light text-xs font-heading tracking-wider uppercase mb-2">
               Username
             </label>
             <input
@@ -72,13 +72,13 @@ export default function AdminLoginPage() {
               value={username}
               onChange={(e) => setUsername(e.target.value)}
               className="admin-input !py-3"
-              placeholder="Enter thy name..."
+              placeholder="Enter username..."
               required
             />
           </div>
 
           <div>
-            <label className="block text-iron-light text-xs font-heading tracking-wider uppercase mb-2">
+            <label className="block text-stardust-light text-xs font-heading tracking-wider uppercase mb-2">
               Password
             </label>
             <input
@@ -86,7 +86,7 @@ export default function AdminLoginPage() {
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               className="admin-input !py-3"
-              placeholder="Speak the secret word..."
+              placeholder="Enter access code..."
               required
             />
           </div>
@@ -96,11 +96,11 @@ export default function AdminLoginPage() {
             disabled={loading}
             className="medieval-btn w-full text-center text-sm disabled:opacity-50 disabled:cursor-not-allowed"
           >
-            {loading ? 'Opening the gates...' : 'Enter the Castle'}
+            {loading ? 'Authenticating...' : 'Launch Mission Control'}
           </button>
         </form>
 
-        <p className="text-center text-iron-light/20 text-[10px] font-heading tracking-widest uppercase mt-6">
+        <p className="text-center text-stardust-light/20 text-[10px] font-heading tracking-widest uppercase mt-6">
           Authorized personnel only
         </p>
       </div>
