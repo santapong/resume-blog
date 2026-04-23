@@ -2,16 +2,16 @@ services:
   backend:
     build:
       context: ./backend
-      dockerfile: dockerfile
-    container_name: medieval-backend
+      dockerfile: Dockerfile
+    container_name: cosmic-backend
     ports:
       - "12001:12001"
     environment:
       - NODE_ENV=production
-      - DATABASE_URL=file:./dev.db
+      - DATABASE_URL=file:./data/dev.db
     volumes:
       - backend-uploads:/app/uploads
-      - backend-db:/app/prisma
+      - backend-db:/app/prisma/data
     restart: always
     healthcheck:
       test: ["CMD", "curl", "-f", "http://localhost:12001/api/config"]
@@ -23,17 +23,27 @@ services:
   frontend:
     build:
       context: ./frontend
-      dockerfile: dockerfile
-    container_name: medieval-frontend
+      dockerfile: Dockerfile
+      args:
+        # Baked into the Next.js bundle at build time. Override for
+        # remote deploy: `--build-arg NEXT_PUBLIC_API_URL=https://...`
+        NEXT_PUBLIC_API_URL: http://localhost:12001/api
+    container_name: cosmic-frontend
     ports:
       - "12000:3000"
     environment:
       - NODE_ENV=production
-      - NEXT_PUBLIC_API_URL=http://backend:12001/api
+      - NEXT_PUBLIC_API_URL=http://localhost:12001/api
     depends_on:
       backend:
         condition: service_healthy
     restart: always
+    healthcheck:
+      test: ["CMD-SHELL", "wget --spider -q http://localhost:3000 || exit 1"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 20s
 
 volumes:
   backend-uploads:

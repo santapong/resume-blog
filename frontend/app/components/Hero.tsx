@@ -85,11 +85,15 @@ export default function Hero() {
         background: 'radial-gradient(ellipse at 50% 50%, rgba(10, 11, 30, 1) 0%, rgba(5, 5, 16, 1) 100%)',
       }}
     >
+      {/* Cinematic letterbox bars (lg+ only, scoped to hero) */}
+      <div className="cinematic-letterbox cinematic-letterbox-top" aria-hidden="true" />
+      <div className="cinematic-letterbox cinematic-letterbox-bottom" aria-hidden="true" />
+
       <FloatingParticles count={35} />
 
       {/* Nebula gradient orbs */}
       <div
-        className="absolute w-[600px] h-[600px] rounded-full pointer-events-none opacity-20"
+        className="cinematic-slow-zoom absolute w-[600px] h-[600px] rounded-full pointer-events-none opacity-20"
         style={{
           background: 'radial-gradient(circle, rgba(139,92,246,0.4) 0%, rgba(77,139,255,0.15) 40%, transparent 70%)',
           top: '5%',
@@ -138,7 +142,7 @@ export default function Hero() {
       <div className="max-w-5xl w-full px-6 z-10">
         <div className="space-y-8 text-center">
           {/* Status Badge */}
-          <div className="inline-flex items-center gap-2.5 bg-void-light/60 backdrop-blur-xl border border-nebula-purple/20 px-5 py-2.5 rounded-full animate-fade-in-up">
+          <div className="inline-flex items-center gap-2.5 bg-void-light/60 backdrop-blur-xl border border-nebula-purple/20 px-3 py-2 sm:px-5 sm:py-2.5 rounded-full animate-fade-in-up">
             <span className="relative flex h-2.5 w-2.5">
               <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-aurora-green opacity-75" />
               <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-aurora-green" />
@@ -149,7 +153,7 @@ export default function Hero() {
           </div>
 
           {/* Main Title */}
-          <div className="space-y-5 animate-fade-in-up" style={{ animationDelay: '0.15s' }}>
+          <div className="space-y-5 animate-fade-in-up opacity-0" style={{ animationDelay: '0.4s', animationFillMode: 'forwards' }}>
             <h1 className="text-5xl md:text-7xl lg:text-8xl font-heading tracking-tight text-starlight leading-[0.95]">
               <span className="block">
                 {config?.heroTitle?.split(' ').slice(0, -1).join(' ') || 'Software &'}
@@ -175,14 +179,14 @@ export default function Hero() {
           </div>
 
           {/* Divider */}
-          <div className="flex items-center justify-center gap-4 animate-fade-in-up" style={{ animationDelay: '0.3s' }}>
+          <div className="flex items-center justify-center gap-4 animate-fade-in-up opacity-0" style={{ animationDelay: '0.9s', animationFillMode: 'forwards' }}>
             <div className="h-px w-32 bg-linear-to-r from-transparent to-nebula-purple/40" />
             <span className="text-nebula-purple/60 text-sm animate-pulse">&#10022;</span>
             <div className="h-px w-32 bg-linear-to-l from-transparent to-nebula-blue/40" />
           </div>
 
           {/* CTA Buttons */}
-          <div className="flex flex-wrap justify-center gap-5 pt-2 animate-fade-in-up" style={{ animationDelay: '0.45s' }}>
+          <div className="flex flex-wrap justify-center gap-5 pt-2 animate-fade-in-up opacity-0" style={{ animationDelay: '1.3s', animationFillMode: 'forwards' }}>
             <button onClick={() => scrollTo('skills')} className="medieval-btn text-sm">
               Explore Skills
             </button>
@@ -192,12 +196,11 @@ export default function Hero() {
           </div>
 
           {/* Tech stack mini-badges */}
-          <div className="pt-8 flex flex-wrap justify-center items-center gap-3 animate-fade-in-up" style={{ animationDelay: '0.6s' }}>
-            {['TypeScript', 'Python', 'React', 'Node.js', 'Docker'].map((tech, i) => (
+          <div className="pt-8 flex flex-wrap justify-center items-center gap-3 animate-fade-in-up opacity-0" style={{ animationDelay: '1.7s', animationFillMode: 'forwards' }}>
+            {['TypeScript', 'Python', 'React', 'Node.js', 'Docker'].map((tech) => (
               <span
                 key={tech}
                 className="px-3 py-1 text-[10px] font-heading tracking-widest uppercase text-stardust-light/60 border border-nebula-purple/10 rounded-full hover:text-nebula-purple-light hover:border-nebula-purple/30 transition-all duration-300 cursor-default hover:shadow-[0_0_15px_rgba(139,92,246,0.15)]"
-                style={{ animationDelay: `${0.7 + i * 0.1}s` }}
               >
                 {tech}
               </span>
@@ -207,7 +210,7 @@ export default function Hero() {
       </div>
 
       {/* Scroll indicator */}
-      <div className="absolute bottom-10 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2 opacity-40 animate-bounce">
+      <div className="absolute bottom-16 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2 opacity-60 md:opacity-40 animate-bounce">
         <span className="text-stardust-light text-[10px] font-heading tracking-widest uppercase">Scroll</span>
         <div className="w-5 h-8 border border-nebula-purple/50 rounded-full flex justify-center">
           <div className="w-1 h-2.5 bg-nebula-purple/50 rounded-full mt-1.5 animate-pulse" />

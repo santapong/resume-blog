@@ -87,7 +87,7 @@ export default function About() {
           </ScrollReveal>
 
           {/* Highlight cards */}
-          <div className="lg:col-span-2 space-y-4">
+          <div className="lg:col-span-2 space-y-4 sm:space-y-5">
             {highlights.map((item, i) => (
               <ScrollReveal key={item.label} delay={200 + i * 100}>
                 <div className="group glass-card p-5 flex items-start gap-4 hover:border-nebula-purple/20">

@@ -54,7 +54,7 @@ resume-blog/
 | DELETE | `/api/experiences/:id` | Yes  | Delete experience        |
 | GET    | `/api/skills`          | No   | List all skills          |
 | POST   | `/api/skills`          | Yes  | Create skill             |
-| PUT    | `/api/sills/:id`      | Yes  | Update skill             |
+| PUT    | `/api/skills/:id`      | Yes  | Update skill             |
 | DELETE | `/api/skills/:id`      | Yes  | Delete skill             |
 | GET    | `/api/projects`        | No   | List all projects        |
 | POST   | `/api/projects`        | Yes  | Create project           |
