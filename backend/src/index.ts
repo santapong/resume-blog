@@ -8,6 +8,7 @@ import { resumeRouter } from './routes/resume';
 import { authRouter } from './routes/auth';
 import { configRouter } from './routes/config';
 import { socialsRouter } from './routes/socials';
+import { postsRouter } from './routes/posts';
 
 const app = express();
 const PORT = process.env.PORT || 12001;
@@ -27,6 +28,7 @@ app.use('/api/resume', resumeRouter);
 app.use('/api/auth', authRouter);
 app.use('/api/config', configRouter);
 app.use('/api/socials', socialsRouter);
+app.use('/api/posts', postsRouter);
 
 // Health check
 app.get('/api/health', (_req, res) => {

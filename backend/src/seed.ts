@@ -94,6 +94,28 @@ async function main() {
         ],
     });
 
+    // Seed blog posts (one published, one draft) so /blog renders out of the box
+    await prisma.blogPost.createMany({
+        data: [
+            {
+                title: 'Hello, Cosmos',
+                slug: 'hello-cosmos',
+                excerpt: 'A quick note on why this site exists and what I plan to write here.',
+                content: '# Hello, Cosmos\n\nThis is the first entry in the log. Expect short notes on **automation**, **embedded systems**, and the occasional **AI tinkering** session.\n\nIf any of that sounds interesting, stick around.',
+                tags: JSON.stringify(['meta', 'intro']),
+                published: true,
+            },
+            {
+                title: 'Notes on a Pico W drone',
+                slug: 'notes-on-a-pico-w-drone',
+                excerpt: 'Draft — early observations from tuning a PID loop on the Muninn flight controller.',
+                content: '# Notes on a Pico W drone\n\n*(draft)* \n\nTuning a PID loop on a 150 MHz microcontroller is a different game than on a simulator. More soon.',
+                tags: JSON.stringify(['rust', 'embedded', 'control-theory']),
+                published: false,
+            },
+        ],
+    });
+
     // Seed site config
     await prisma.siteConfig.create({
         data: {
