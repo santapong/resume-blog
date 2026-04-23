@@ -254,3 +254,27 @@ export async function deleteSocial(id: number): Promise<void> {
     if (!res.ok) throw new Error('Failed to delete social link');
 }
 
+// ─── Blog Posts ──────────────────────────────────────────────────
+export interface BlogPost {
+    id: number;
+    title: string;
+    slug: string;
+    excerpt: string | null;
+    content: string;
+    tags: string[];
+    published: boolean;
+    createdAt: string;
+    updatedAt: string;
+}
+
+export async function getPosts(): Promise<BlogPost[]> {
+    const res = await fetch(`${API_URL}/posts`, { cache: 'no-store' });
+    if (!res.ok) return [];
+    return res.json();
+}
+
+export async function getPost(slug: string): Promise<BlogPost | null> {
+    const res = await fetch(`${API_URL}/posts/${slug}`, { cache: 'no-store' });
+    if (!res.ok) return null;
+    return res.json();
+}
