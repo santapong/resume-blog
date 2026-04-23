@@ -106,7 +106,7 @@ export default function Skills() {
                             style={{ width: `${Math.min(100, group.items.length * 12)}%` }}
                           />
                         </div>
-                        <span className="text-nebula-purple-light/60 font-heading text-xs">
+                        <span className="text-nebula-purple-light/60 font-heading text-xs sm:text-sm">
                           {group.items.length}
                         </span>
                       </div>
