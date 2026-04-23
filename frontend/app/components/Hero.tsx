@@ -138,7 +138,7 @@ export default function Hero() {
       <div className="max-w-5xl w-full px-6 z-10">
         <div className="space-y-8 text-center">
           {/* Status Badge */}
-          <div className="inline-flex items-center gap-2.5 bg-void-light/60 backdrop-blur-xl border border-nebula-purple/20 px-5 py-2.5 rounded-full animate-fade-in-up">
+          <div className="inline-flex items-center gap-2.5 bg-void-light/60 backdrop-blur-xl border border-nebula-purple/20 px-3 py-2 sm:px-5 sm:py-2.5 rounded-full animate-fade-in-up">
             <span className="relative flex h-2.5 w-2.5">
               <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-aurora-green opacity-75" />
               <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-aurora-green" />
@@ -207,7 +207,7 @@ export default function Hero() {
       </div>
 
       {/* Scroll indicator */}
-      <div className="absolute bottom-10 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2 opacity-40 animate-bounce">
+      <div className="absolute bottom-10 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2 opacity-60 md:opacity-40 animate-bounce">
         <span className="text-stardust-light text-[10px] font-heading tracking-widest uppercase">Scroll</span>
         <div className="w-5 h-8 border border-nebula-purple/50 rounded-full flex justify-center">
           <div className="w-1 h-2.5 bg-nebula-purple/50 rounded-full mt-1.5 animate-pulse" />
