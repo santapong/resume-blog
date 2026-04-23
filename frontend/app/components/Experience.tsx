@@ -65,7 +65,7 @@ export default function Experience() {
                               {job.title}
                             </h3>
                           </div>
-                          <p className="text-nebula-blue-light/80 font-medium mt-1.5 flex items-center gap-2 text-sm">
+                          <p className="text-nebula-blue-light font-medium mt-1.5 flex items-center gap-2 text-sm">
                             <span className="w-6 h-6 rounded-lg bg-nebula-blue/10 flex items-center justify-center text-xs">🏢</span>
                             {job.company}
                           </p>
