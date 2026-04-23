@@ -2,16 +2,16 @@ services:
   backend:
     build:
       context: ./backend
-      dockerfile: dockerfile
-    container_name: medieval-backend
+      dockerfile: Dockerfile
+    container_name: cosmic-backend
     ports:
       - "12001:12001"
     environment:
       - NODE_ENV=production
-      - DATABASE_URL=file:./dev.db
+      - DATABASE_URL=file:./data/dev.db
     volumes:
       - backend-uploads:/app/uploads
-      - backend-db:/app/prisma
+      - backend-db:/app/prisma/data
     restart: always
     healthcheck:
       test: ["CMD", "curl", "-f", "http://localhost:12001/api/config"]
