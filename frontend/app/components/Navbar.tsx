@@ -27,10 +27,11 @@ export default function Navbar() {
   const links = [
     { name: 'Command Center', path: '/' },
     { name: 'Projects', path: '/projects' },
+    { name: 'Blog', path: '/blog' },
     { name: 'Resume', path: '/resume' },
   ];
 
-  const isActive = (path: string) => pathname === path;
+  const isActive = (path: string) => pathname === path || (path !== '/' && pathname.startsWith(path + '/'));
 
   return (
     <header
