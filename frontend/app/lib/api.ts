@@ -1,4 +1,5 @@
-const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:12001/api';
+// Same-origin: API routes live in this Next.js app under /api/*.
+const API_URL = process.env.NEXT_PUBLIC_API_URL || '/api';
 
 // ─── Types ───────────────────────────────────────────────────────
 export interface Experience {

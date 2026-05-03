@@ -1,71 +1,108 @@
-# Resume Blog — Medieval Portfolio
+# Resume Blog — Cosmic Portfolio
 
 > *"A knight's portfolio, forged in code and presented upon digital parchment."*
 
-A full-stack, medieval-themed personal portfolio website for showcasing experience, skills, projects, and a resume/CV. Features rich parchment textures, scroll-reveal animations, floating embers, and a fully functional admin dashboard.
+A full-stack personal portfolio with experience, skills, projects, blog, and an admin dashboard. Built as a single Next.js app — runs entirely on Vercel's free tier.
 
 ## Tech Stack
-- **Frontend:** Next.js 16 (App Router), React 19, Tailwind CSS 4, TypeScript
-- **Backend:** Express.js, Prisma ORM, SQLite, JWT Auth
-- **Environment:** Bun runtime, Docker
+- **Framework:** Next.js 16 (App Router), React 19, Tailwind CSS 4, TypeScript
+- **Database:** Prisma + Postgres (Neon free tier)
+- **File storage:** Vercel Blob (for resume PDF uploads)
+- **Auth:** JWT, bcrypt
+- **Runtime:** Bun (local), Vercel serverless (production)
 
 ---
 
-## 🚀 How to Run
+## 🚀 Local Development
 
-You can run this project either using **Docker** (recommended for production/easy setup) or locally using **Bun** (recommended for development).
+Requires [Bun](https://bun.sh/), and a Postgres database (use [Neon](https://neon.tech) — free, no install — or run Postgres locally).
 
-### Option 1: Using Docker (Easiest)
-Requires [Docker](https://docs.docker.com/get-docker/) installed on your machine.
-
-1. Clone the repository and navigate to the project root:
-   ```bash
-   cd resume-blog
-   ```
-2. Build and start the containers in detached mode:
-   ```bash
-   docker compose up -d --build
-   ```
-3. Access the application:
-   - **Portfolio Site:** [http://localhost:12000](http://localhost:12000)
-   - **Admin Gatehouse:** [http://localhost:12000/admin](http://localhost:12000/admin)
-
-To stop the servers, run: `docker compose down`
-
----
-
-### Option 2: Local Development with Bun
-Requires [Bun](https://bun.sh/) installed on your machine.
-
-#### 1. Setup the Backend
-Open a terminal and run the following:
-```bash
-cd backend
-bun install
-bunx prisma db push     # Create/sync the SQLite database
-bun run seed            # Seed initial data and admin user
-bun run dev             # Start the backend API server
-```
-*The backend will run on `http://localhost:12001`*
-
-#### 2. Setup the Frontend
-Open a **second terminal** and run the following:
 ```bash
 cd frontend
-bun install
-bun run dev             # Start the Next.js development server
+bun install                        # also runs prisma generate
+cp .env.example .env.local         # fill in DATABASE_URL, JWT_SECRET, ADMIN_PASSWORD_HASH
+bun run hash:password 'admin123'   # generates the bcrypt hash to paste into .env.local
+bun run db:push                    # apply schema to Postgres
+bun run db:seed                    # seed initial portfolio data
+bun run dev                        # http://localhost:3000
 ```
-*The frontend will run on `http://localhost:3000`*
 
-3. Access the application:
-   - **Portfolio Site:** [http://localhost:3000](http://localhost:3000)
-   - **Admin Gatehouse:** [http://localhost:3000/admin](http://localhost:3000/admin)
+Admin dashboard: http://localhost:3000/admin (login with the username/password matching `ADMIN_PASSWORD_HASH`).
+
+---
+
+## ☁️ Deploying to Vercel
+
+The whole app — frontend, API, database access, and file uploads — runs on Vercel. No separate backend host needed.
+
+### 1. Create a Postgres database (Neon, free)
+
+1. Sign up at [neon.tech](https://neon.tech).
+2. Create a project. Copy the **pooled** connection string (Neon labels it for serverless).
+3. Save it for step 3.
+
+### 2. Push code to GitHub
+
+If you haven't already: create a GitHub repo and push this project.
+
+### 3. Import to Vercel
+
+1. [vercel.com/new](https://vercel.com/new) → import the repo.
+2. **Root Directory** → `frontend`.
+3. Framework auto-detects as Next.js. Leave build/install commands as defaults.
+4. Add **Environment Variables**:
+   - `DATABASE_URL` — your Neon connection string
+   - `JWT_SECRET` — long random string: `openssl rand -hex 32`
+   - `ADMIN_USERNAME` — e.g. `admin`
+   - `ADMIN_PASSWORD_HASH` — bcrypt hash; generate with:
+     ```bash
+     cd frontend && bun run hash:password 'YOUR_STRONG_PASSWORD'
+     ```
+5. **Deploy.** First build will fail at runtime if the DB schema isn't applied yet — see step 4.
+
+### 4. Apply schema and seed (one-time)
+
+After the first deploy, run from your local machine using the same `DATABASE_URL`:
+
+```bash
+cd frontend
+DATABASE_URL='<neon-url>' bun run db:push
+DATABASE_URL='<neon-url>' bun run db:seed
+```
+
+### 5. Enable Vercel Blob (for resume uploads)
+
+1. In the Vercel dashboard → your project → **Storage** → **Create** → **Blob**.
+2. Vercel auto-injects `BLOB_READ_WRITE_TOKEN` into your project's env vars.
+3. Redeploy (or trigger by pushing a commit) so the new env var takes effect.
+
+That's it. Visit your `*.vercel.app` URL.
 
 ---
 
 ## 🔐 Default Admin Credentials
-To access the admin dashboard to manage your portfolio:
+
+For local dev only:
 - **Username:** `admin`
 - **Password:** `admin123`
 
-*(Change these in `backend/.env` before deploying to production!)*
+**Generate fresh credentials before deploying.** Use `bun run hash:password 'NEW_PASSWORD'` and update `ADMIN_PASSWORD_HASH` in Vercel's env vars.
+
+---
+
+## 📁 Project Structure
+
+```
+frontend/
+  app/
+    api/             — Next.js route handlers (the "backend")
+    admin/           — admin dashboard pages
+    blog/, projects/, resume/  — public pages
+    components/, lib/, data/   — shared client code
+  lib/               — shared server code (prisma, auth)
+  prisma/
+    schema.prisma    — database schema
+    seed.ts          — initial portfolio data
+  scripts/
+    hash-password.ts — bcrypt hash generator
+```

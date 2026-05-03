@@ -1,21 +1,12 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
-  output: 'standalone',
-  async rewrites() {
-    return [
-      {
-        source: '/api/:path*',
-        destination: `${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:12001/api'}/:path*`,
-      },
-    ];
-  },
+  // Vercel Blob serves uploaded files (e.g. project images) from this host.
+  // Allow it through next/image. Add other hosts here if you reference
+  // external images directly.
   images: {
     remotePatterns: [
-      {
-        protocol: 'http',
-        hostname: 'localhost',
-      },
+      { protocol: 'https', hostname: '**.public.blob.vercel-storage.com' },
     ],
   },
 };
